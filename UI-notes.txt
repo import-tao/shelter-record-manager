@@ -1,1 +1,3 @@
-The user interface needs to be something lightweight and flexible. A web interface which is compatible with mobile and PC devices is ideal. A web UI seems appropriate.
+The user interface needs to be something lightweight and flexible.
+A web interface which is compatible with mobile and PC devices is ideal.
+A web UI seems appropriate.
