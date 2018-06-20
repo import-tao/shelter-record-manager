@@ -1,0 +1,6 @@
+*.log
+local_settings.py
+db.sqlite3
+venv
+secret_environment_keys.py
+__pycache__/
