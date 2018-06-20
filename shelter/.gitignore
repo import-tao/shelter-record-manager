@@ -6,3 +6,5 @@ secret_environment_keys.py
 __pycache__/
 __pycache__
 .pyc
+
+.vs
