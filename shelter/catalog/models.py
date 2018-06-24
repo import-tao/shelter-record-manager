@@ -17,6 +17,9 @@ class Color(models.Model):
 
     def __str__(self):
         return self.type
+    
+    class Meta:
+        ordering = ('type',)
         
 class Animal(models.Model):
     HAIR_TYPE_CHOICES = (
@@ -60,8 +63,10 @@ class AnimalInstance(models.Model):
     species = models.ForeignKey('Animal', on_delete=models.PROTECT)
     cross = models.NullBooleanField(blank= True)
     bio = models.TextField(max_length = 1000, help_text= 'Enter a breif description about the animal. \
-                                                         \nThis may include distinctive markings, additional behaviour or care comments.')
-    personality= models.TextField(max_length= 200, null= False, blank= True, help_text='Summarise the animal\'s demeanour\ne.g. calm, friendly')
+                                                         \nThis may include distinctive markings, \
+                                                        additional behaviour or care comments.')
+    personality= models.TextField(max_length= 200, null= False, blank= True, \
+                                    help_text='Summarise the animal\'s demeanour\ne.g. calm, friendly')
     status= models.CharField(max_length= 1, choices=ADOPTION_STATUS, help_text='Select the best fit status for the animal.')
     
     def __str__(self):
@@ -100,7 +105,6 @@ class Caretakers(Address):
     email = models.EmailField(message='Please enter a valid email address', blank=True)
     contactnumber1 = models.IntegerField(help_text= 'The primary contact number.')
     contactnumber2 = models.IntegerField(help_text= 'The secondary contact number.')
-    animal = models.ForeignKey('Animal', on_delete=models.PROTECT)
 
     def __str__(self):
         return '{0} {1}'.format(self.first_name, self.last_name)
@@ -117,3 +121,28 @@ class Medication(models.Model):
     weekly_dose = models.CharField(help_text= 'How many days in the week need medication \
                                                 e.g. 3 times a day every day would mean this is 7- a dose required each day.')
     daily_dose = models.CharField(help_text = 'How many times per day.')
+
+class Allergies(models.Model):
+    allergy = models.CharField(max_length= 35, help_text = 'What allergies does the animal have?')
+
+    def __str__(self):
+        return self.allergy
+    
+    class Meta:
+        ordering = ('allergy',)
+
+class Diet(models.Model):
+    FOOD_TYPE_CHOICES = (
+        ('h','Hard'),
+        ('s','Soft'),
+    )
+    food_type = models.CharField(choices=FOOD_TYPE_CHOICES)
+    portion_size = models.IntegerField(help_text= 'How big is each portion of food in lbs?')
+    daily_portions = models.IntegerField('Meals per day', help_text='How many meals per day?')
+    allergy = models.ManyToManyField(Allergies, help_text = 'What allergies (if any?) does the animal have?')
+
+    def __str__(self):
+        return '{0} food, {1}lbs {2} times a day'.format(self.food_type, self.portion_size, self.daily_portions)
+    
+    class Meta:
+        ordering = ('food_type',)
