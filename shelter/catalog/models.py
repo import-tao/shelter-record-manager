@@ -41,7 +41,7 @@ class Animal(models.Model):
     )
     animal_species = models.CharField(max_length= 30, null= False, blank= True, help_text= 'Please choose what species of animal this is.')
     join_date= models.DateField(null=False, blank=False, help_text= 'Date animal started at the shelter.')
-    gender= models.CharField(blank= True, choices= GENDER_CHOICES)
+    gender= models.CharField(max_length= 6, blank= True, choices= GENDER_CHOICES)
     breed = models.CharField(max_length= 40, help_text= 'Please select what breed of animal it is.')
     hair_type = models.CharField(max_length= 1, choices = HAIR_TYPE_CHOICES, help_text= 'Please select the type of hair it has.')
     hair_length = models.CharField(max_length= 1, choices= HAIR_LENGTH_CHOICES, help_text= 'Please select the length of the hair.')
@@ -94,7 +94,7 @@ class Address(models.Model):
         abstract= True 
 
 class Shelter_Location(Address):
-    name = models.CharField('Building Name', help_text= 'Please enter the name of the shelter building.')
+    name = models.CharField('Building Name', max_length = 40, help_text= 'Please enter the name of the shelter building.')
 
 class Home_History(Address):
     current = models.NullBooleanField(blank= True)
@@ -102,25 +102,28 @@ class Home_History(Address):
 class Caretakers(Address):
     first_name = models.CharField(max_length = 30)
     last_name = models.CharField(max_length= 30)
-    email = models.EmailField(message='Please enter a valid email address', blank=True)
+    email = models.EmailField(help_text='Please enter a valid email address', blank=True)
     contactnumber1 = models.IntegerField(help_text= 'The primary contact number.')
     contactnumber2 = models.IntegerField(help_text= 'The secondary contact number.')
 
     def __str__(self):
         return '{0} {1}'.format(self.first_name, self.last_name)
+    
+    class Meta:
+        verbose_name_plural = 'Caretakers'
 
 class Medication(models.Model):
     TYPE_CHOICES = (
         ('p', 'Pill'),
         ('i', 'Injection'),
     )
-    name = models.CharField('Medication')
-    type = models.CharField(choices=TYPE_CHOICES)
+    name = models.CharField('Medication', max_length= 50)
+    type1 = models.CharField('Type', max_length= 1,choices=TYPE_CHOICES)
     date_start = models.DateField()
     date_finish = models.DateField()
-    weekly_dose = models.CharField(help_text= 'How many days in the week need medication \
+    weekly_dose = models.IntegerField(help_text= 'How many days in the week need medication \
                                                 e.g. 3 times a day every day would mean this is 7- a dose required each day.')
-    daily_dose = models.CharField(help_text = 'How many times per day.')
+    daily_dose = models.IntegerField(help_text = 'How many times per day.')
 
 class Allergies(models.Model):
     allergy = models.CharField(max_length= 35, help_text = 'What allergies does the animal have?')
@@ -130,13 +133,14 @@ class Allergies(models.Model):
     
     class Meta:
         ordering = ('allergy',)
+        verbose_name_plural = 'Allergies'
 
 class Diet(models.Model):
     FOOD_TYPE_CHOICES = (
         ('h','Hard'),
         ('s','Soft'),
     )
-    food_type = models.CharField(choices=FOOD_TYPE_CHOICES)
+    food_type = models.CharField(max_length=1, choices=FOOD_TYPE_CHOICES)
     portion_size = models.IntegerField(help_text= 'How big is each portion of food in lbs?')
     daily_portions = models.IntegerField('Meals per day', help_text='How many meals per day?')
     allergy = models.ManyToManyField(Allergies, help_text = 'What allergies (if any?) does the animal have?')
@@ -146,3 +150,4 @@ class Diet(models.Model):
     
     class Meta:
         ordering = ('food_type',)
+        verbose_name_plural = 'Diet'

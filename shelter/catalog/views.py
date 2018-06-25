@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from models import AnimalInstance
+from .models import AnimalInstance
 from django.views.generic import CreateView, UpdateView, DeleteView, DetailView
 
 # Create your views here.
