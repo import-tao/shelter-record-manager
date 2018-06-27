@@ -10,3 +10,4 @@ __pycache__
 .vs/
 .vs
 migrations/
+slnx.sqlite
