@@ -18,8 +18,12 @@ from django.urls import path
 from django.conf.urls import include
 from . import views
 
+# The include function means for anythin which is 'app/' in the url, it will send it to the catalog app, urls file
+# The next step of routing is then handled by the urls.py file in catalog/urls.py
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # Naming the paths make it a lot easier for front end and particularly when make changes
     path('', views.index, name= 'index'),
     path('app/', include('catalog.urls'))
 ]
