@@ -1,6 +1,13 @@
 *.log
 local_settings.py
 db.sqlite3
-venv
+venv/
 secret_environment_keys.py
 __pycache__/
+__pycache__
+.pyc
+
+.vs/
+.vs
+migrations/
+slnx.sqlite
