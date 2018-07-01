@@ -1,13 +1,22 @@
 # Shelter-Record-Manager
-
 This is a project to build an app to manage the day to day running of an animal shelter.
+
+## Git Crash Course to Start Contributing
+At a high level, here’s how we suggest you go about proposing a change to this project:
+
+1. [Fork this project](https://help.github.com/articles/fork-a-repo/) to your account.
+2. [Create a branch](https://help.github.com/articles/creating-and-deleting-branches-within-your-repository) for the change you intend to make.
+3. Make your changes to your fork.
+4. [Send a pull request](https://help.github.com/articles/using-pull-requests/) from your fork’s branch to our master branch.
+
+Click on the hyperlinks for a more detailed walk through of how to do each step.
 
 ## How to get up and running
 
 Before we get started the below assumes that you have python installed. This project has been created using 3.6. If you do not have python, see the [python website](https://www.python.org/downloads/) to download it.
 If you have multiple versions of python installed on your computer, where it refers to typing "python" in the cmd line, you will need to specify which one you have e.g.
 
-```
+``` shell
 python3
 ```
 
@@ -62,20 +71,20 @@ Naviagte to the folder (using cmd line) you wish to install the virtual environe
 
 Write the following to create the virtual environment. The first venv is the name of the package, and the second venv is the name of the environment you are creating. You could therefore change this to whatever you want.
 
-``` cmd
+``` shell
 python -m venv venv
 ```
 
 To activate using Windows do:
 
-``` cmd
+``` shell
 > venv\Scripts\activate
 (venv) $_
 ```
 
 To activate using mac:
 
-``` cmd
+``` shell
 $source venv\bin\activate
 (venv) $_
 ```
@@ -84,7 +93,7 @@ You will know you have activated it as it will say the name of your virtual envi
 
 To deactivate it once you have finished with it, all you need to do is type the below. If you are successful, it will remove the name of your virtual environemnt from the brackets in the cmd line:
 
-```cmd
+```shell
 deactivate
 $_
 ```
@@ -93,7 +102,7 @@ $_
 
 Now navigate to the folder which contains requirements.txt and type the following:
 
-``` cmd
+``` shell
 pip install -r requirements.txt
 ```
 
@@ -101,11 +110,15 @@ This will read the requirements.txt file and automatically install everything wi
 
 ### Step 4 - Run a Local Server
 
-We should by now have created our config file, virtual environment and activated it. All that is left is to run a local server.
+We should by now have:  
+[x] Created our config file  
+[x] Set up a virtual environment  
+[x] Activated it
 
+All that is left is to run a local server.  
 Using the cmd line, go to the folder with "manage.py" in it (the same one as requirements.txt) and type the following:
 
-``` cmd
+``` shell
 python manage.py runserver
 ```
 
@@ -117,7 +130,7 @@ python manage.py runserver 5050
 
 If it was successful, and there are no problems in the code preventing it from running (e.g. syntax error) you will see the below:
 
-```
+``` shell
 Performing system checks...
 
 System check identified no issues (0 silenced).
