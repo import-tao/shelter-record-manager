@@ -1,0 +1,19 @@
+{% extends "catalog/base.html" %} 
+{% block title %}<title>{{ animal_instance.name }}'s profile</title> {% endblock %}
+{% block content %}
+<!--animal_instance is being used as this has been specified within the views as the context object name-->
+<h1>{{ animal_instance.name }}</h1>
+
+
+<p>
+    <strong>Summary: </strong> {{ animal_instance.bio }}</p>
+<p>
+    <strong>Join Date: </strong>{{ animal_instance.join_date|date:'d N Y' }}</p>
+<!-- Similar to models, when accessing a dictionary you need to use .get_*FIELD*_display but without parenthesis at the end to pull through the value, and not the key-->
+<p>
+<strong>Gender: </strong>{{ animal_instance.get_gender_display }}</p>
+
+
+<a href='{% url 'home_page' %}'><strong>Home page</strong></a>
+
+{% endblock %}

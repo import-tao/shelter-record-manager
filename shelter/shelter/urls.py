@@ -25,5 +25,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # Naming the paths make it a lot easier for front end and particularly when make changes
     path('', views.index, name= 'index'),
-    path('app/', include('catalog.urls'))
+    path('app/', include('catalog.urls')),
+    # This accounts path allows us to use the built in django login system
+    path('accounts/', include('django.contrib.auth.urls'))
 ]

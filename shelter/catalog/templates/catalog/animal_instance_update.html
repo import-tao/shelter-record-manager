@@ -1,0 +1,14 @@
+{% extends 'catalog/base.html' %}
+{% block content %}
+<p>To change the type of animal, species or colour then just click <a href="">here</a>.</p>
+<form action="" method="post">
+    {% csrf_token %}
+    <table>
+    {{ form.as_table }}
+    </table>
+    <input type="submit" value="Save" />
+    
+</form>
+
+
+{% endblock %}
