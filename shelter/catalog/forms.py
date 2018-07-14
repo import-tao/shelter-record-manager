@@ -6,7 +6,6 @@ class AnimalCreateForm(forms.ModelForm):
         model = models.Animal
         fields = [
             'animal_species',
-            'color',
             'breed',
         ]
 
@@ -19,8 +18,5 @@ class AnimalInstanceCreateForm(forms.ModelForm):
             'cross',
             'leaving_date',
             'caretaker',
-            'homehistory',
             'diet',
-            'medication',
-            'allergies',
         )

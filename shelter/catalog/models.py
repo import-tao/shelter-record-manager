@@ -14,7 +14,8 @@ To do
 '''
 # for the different type of model fields (manytomany, foreignkey, charfield, textfield, integerfield, flotfield etc. refer to the docs 
 # https://docs.djangoproject.com/en/2.0/topics/db/models/ or the mozilla guide which i found very useful https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/Models
-class Color(models.Model):
+
+class Colour(models.Model):
     colorfield = models.CharField('Color', max_length = 30, null= False, blank= False, help_text= 'What color(s) is the animal?')
     
     # str function returns what the object of this will be displayed as
@@ -25,17 +26,24 @@ class Color(models.Model):
     # the front end display name of the class, how the data is ordered when viewed in admin as well as how the plural of it
     class Meta:
         ordering = ('colorfield',)
+
+class Color(models.Model):
+        color = models.ManyToManyField(Colour, help_text= 'Confirm which colour(s) the animal is.', blank= True)
+        animalinst1 = models.ForeignKey('AnimalInstance', on_delete=models.SET_NULL, blank=True, null=True)
+
+        def __str__(self):
+            return '{0}'.format(", ".join([col.colorfield for col in self.color.all()]))
+
         
 class Animal(models.Model):
     animal_species = models.CharField(max_length= 30, null= False, blank= True, help_text= 'Please choose what species of animal this is.')
-    color = models.ManyToManyField(Color, help_text= 'Confirm which colour(s) the animal is.', blank= True)
     breed = models.CharField(max_length= 40, help_text= 'Please select what breed of animal it is.', blank=True)    
 
     # This str function is different as it has a list comprehension. This is used because it is getting info from a many to many field and therefore
     # need to join up all the possible 'colours'.
 
     def __str__(self):
-        return '{0} {1} {2}'.format(", ".join([col.colorfield for col in self.color.all()]), self.breed, self.animal_species)
+        return '{0} {1}'.format(self.breed, self.animal_species)
 
 class AnimalInstance(models.Model):
     # These tuples are formed part of the model below and referenced by choices = **
@@ -69,7 +77,7 @@ class AnimalInstance(models.Model):
     # For foreign keys, if the table is before it, you do not have to put it in a string, but if it is after you do, otherwise it will result in an error.
     # New in 2.0 the on_delete became mandatory. This defines what happens when the other table dets deleted and there are various options of nulling the field
     # deleting it as well (CASCADE), stopping it from being deleted (PROTECT). More information is within the django docs.
-    species = models.ForeignKey('Animal', on_delete=models.PROTECT, blank=True, null=True)
+    species = models.ForeignKey(Animal, on_delete=models.PROTECT, blank=True, null=True)
     cross = models.NullBooleanField(blank= True, default= False, help_text = 'Is the animal a cross breed? if not sure select No.')
     bio = models.TextField(max_length = 1000, help_text= 'Enter a brief description about the animal and their personality. \
                                                          This may include distinctive markings, \
@@ -81,10 +89,9 @@ class AnimalInstance(models.Model):
     hair_type = models.CharField(max_length= 1, choices = HAIR_TYPE_CHOICES, help_text= 'Please select the type of hair it has.', blank= True)
     hair_length = models.CharField(max_length= 1, choices= HAIR_LENGTH_CHOICES, help_text= 'Please select the length of the hair.', default = 's', blank= True)
     caretaker = models.ForeignKey('Caretakers', on_delete=models.CASCADE, blank = True, null=True)
-    homehistory = models.ForeignKey('Home_History', on_delete= models.CASCADE, blank= True, null=True)
+    cage = models.ForeignKey('Building', on_delete= models.CASCADE, blank = True, null=True)
     diet = models.ForeignKey('Diet', on_delete = models.CASCADE, blank = True, null=True)
-    medication = models.ForeignKey('Medication', on_delete = models.CASCADE, blank= True, null=True)
-    allergies = models.ForeignKey('Allergies',on_delete = models.CASCADE, blank= True, null= True)
+    
 
     def __str__(self):
         return '{0}, {1}'.format(self.name, self.species)
@@ -138,6 +145,7 @@ class Shelter_Location(Address):
         verbose_name_plural = 'Shelter Locations'
 
 class Home_History(Address):
+    aniinst2 = models.ForeignKey(AnimalInstance, on_delete= models.CASCADE, blank= True, null=True)
 
     def __str__(self):
         return '{}'.format(self.street)
@@ -166,6 +174,7 @@ class Medication(models.Model):
         ('c', 'Cream'),
         ('d', 'Drops'),
     )
+    aniinst1 = models.ForeignKey(AnimalInstance, on_delete = models.CASCADE, blank= True, null=True)
     comment1 = models.TextField('Comments', max_length = 200, help_text='Please provide more information.', default='')
     name = models.CharField('Medication', max_length= 50)
     type1 = models.CharField('Type', max_length= 1, choices=TYPE_CHOICES)
@@ -180,7 +189,7 @@ class Medication(models.Model):
 
 class Allergies(models.Model):
     allergy = models.CharField(max_length= 35, help_text = 'What allergies does the animal have?', blank=True, null=True)
-
+    aniinst1 = models.ForeignKey(AnimalInstance,on_delete = models.CASCADE, blank= True, null= True)
     def __str__(self):
         return self.allergy
     
