@@ -3,25 +3,25 @@ from django.utils import timezone
 
 # Create your models here.
 '''
-To do 
+To do
 - details about each animal themselves e.g. name, dob etc
-- the species 
+- the species
 - the location
 - caretakers
 - home history
 - medical needs
 - dietary needs
 '''
-# for the different type of model fields (manytomany, foreignkey, charfield, textfield, integerfield, flotfield etc. refer to the docs 
+# for the different type of model fields (manytomany, foreignkey, charfield, textfield, integerfield, flotfield etc. refer to the docs
 # https://docs.djangoproject.com/en/2.0/topics/db/models/ or the mozilla guide which i found very useful https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/Models
 
 class Colour(models.Model):
-    colorfield = models.CharField('Color', max_length = 30, null= False, blank= False, help_text= 'What color(s) is the animal?')
-    
+    colorfield = models.CharField('Color', max_length = 30, null= False, blank= False, help_text= 'What color(s) is the animal?', unique=True)
+
     # str function returns what the object of this will be displayed as
     def __str__(self):
         return self.colorfield
-    
+
     # Meta shows the high level information which can include:
     # the front end display name of the class, how the data is ordered when viewed in admin as well as how the plural of it
     class Meta:
@@ -34,10 +34,10 @@ class Color(models.Model):
         def __str__(self):
             return '{0}'.format(", ".join([col.colorfield for col in self.color.all()]))
 
-        
+
 class Animal(models.Model):
-    animal_species = models.CharField(max_length= 30, null= False, blank= True, help_text= 'Please choose what species of animal this is.')
-    breed = models.CharField(max_length= 40, help_text= 'Please select what breed of animal it is.', blank=True)    
+    animal_species = models.CharField(max_length= 30, null= False, blank= True, help_text= 'What species of animal.')
+    breed = models.CharField(max_length= 40, help_text= 'What breed of animal it is.', blank=True)
 
     # This str function is different as it has a list comprehension. This is used because it is getting info from a many to many field and therefore
     # need to join up all the possible 'colours'.
@@ -60,7 +60,7 @@ class AnimalInstance(models.Model):
         ('c','Curly'),
         ('w','Wiry'),
         ('f','Fluffy'),
-        ('s','Smooth'), 
+        ('s','Smooth'),
     )
     HAIR_LENGTH_CHOICES = (
         ('l','Long'),
@@ -91,23 +91,23 @@ class AnimalInstance(models.Model):
     caretaker = models.ForeignKey('Caretakers', on_delete=models.CASCADE, blank = True, null=True)
     cage = models.ForeignKey('Building', on_delete= models.CASCADE, blank = True, null=True)
     diet = models.ForeignKey('Diet', on_delete = models.CASCADE, blank = True, null=True)
-    
+
 
     def __str__(self):
         return '{0}, {1}'.format(self.name, self.species)
 
     # get_absolute_url will create an automatic url hyperlink for this class and in the admin site, it will have an option 'VIEW ON SITE' which will go direct to it
     # this is also useful when writing navigation within the front end to easily hyperlink to an Animal.
-    # pk = primary key. These are automatically created by django in their own field. You can create your own if you 
+    # pk = primary key. These are automatically created by django in their own field. You can create your own if you
     # wish by using an UUID - More info about UUID in the Mozilla django guide
     def get_absolute_url(self):
         from django.urls import reverse
         return reverse("animal_detail", args=[self.name, str(self.id)])
-    
+
     def get_update_url(self):
         from django.urls import reverse
         return reverse('animal_instance_update', args=[self.name, str(self.id)])
-    
+
     def get_delete_url(self):
         from django.urls import reverse
         return reverse('animal_instance_delete', args=[self.name, str(self.id)])
@@ -131,7 +131,7 @@ class Address(models.Model):
     # Using abstract means that this class/model doesnt actually get stored so to speak, but is instead used to inheret into other models. This is to avoid repetition
     # To inheret you use this class name instead of models.Model as seen in the Shelter_Location class below
     class Meta:
-        abstract= True 
+        abstract= True
 
 class Shelter_Location(Address):
     name = models.CharField('Building Name', max_length = 40, help_text= 'Please enter the name of the shelter building.')
@@ -139,7 +139,7 @@ class Shelter_Location(Address):
 
     def __str__(self):
         return '{}, {}'.format(self.name, self.street)
-    
+
     class Meta:
         verbose_name = 'Shelter Location'
         verbose_name_plural = 'Shelter Locations'
@@ -163,7 +163,7 @@ class Caretakers(Address):
 
     def __str__(self):
         return '{0} {1}'.format(self.first_name, self.last_name)
-    
+
     class Meta:
         verbose_name_plural = 'Caretakers'
 
@@ -192,7 +192,7 @@ class Allergies(models.Model):
     aniinst1 = models.ForeignKey(AnimalInstance,on_delete = models.CASCADE, blank= True, null= True)
     def __str__(self):
         return self.allergy
-    
+
     class Meta:
         ordering = ('allergy',)
         verbose_name_plural = 'Allergies'
@@ -212,9 +212,9 @@ class Diet(models.Model):
     # To get choices in __str__ use self.get_*field name*_display() otherwise it will display the backend part (e.g. 'h' and not 'hard')
     def __str__(self):
         return '{0} food, {1}lbs {2} times a day'.format(self.get_food_type_display(), self.portion_size, self.daily_portions)
-    
+
     # Django does have some logic for plurals but really it it just adds an s on the end. For most it is fine but
-    # not always which is why it is defined here (verbose_name_plural = 'Diet') otherewise it would show as 
+    # not always which is why it is defined here (verbose_name_plural = 'Diet') otherewise it would show as
     # 'Diets' within admin
     class Meta:
         ordering = ('food_type',)
