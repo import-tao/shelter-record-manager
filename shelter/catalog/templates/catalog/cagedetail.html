@@ -1,0 +1,16 @@
+{% extends "catalog/base.html" %}
+{% block title %}<title>Building View</title> {% endblock %}
+{% block content %}
+
+
+<h2>Cages</h2>
+<h3>Occupied</h3>
+{% if animal %}
+{% for ani in animal %}
+<ul>
+    <li>{{ ani.cage }}, <a href={{ani.get_absolute_url }}>{{ani.name}}</a></li>
+</ul>
+{% endfor %}
+{% endif %}
+
+{% endblock %}

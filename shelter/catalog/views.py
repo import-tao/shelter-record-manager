@@ -1,6 +1,6 @@
 from django.shortcuts import render, render_to_response, reverse
 from django.http import HttpResponseRedirect
-from .models import AnimalInstance, Animal
+from .models import AnimalInstance, Animal, Building
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, DeleteView, DetailView
 from . import forms
@@ -12,7 +12,7 @@ To do:
 - List of animals currently available DONE
 - List of animals not in available
 - Page for each animal DONE
-- List of animals in each cage 
+- List of animals in each cage
 - Create new animal DONE
 - delete an animal DONE
 - Maintain/update Animal DONE
@@ -33,7 +33,7 @@ class AnimalDetailView(DetailView):
     template_name = 'catalog/animaldetail.html'
     context_object_name = 'animal_instance'
 
-# View to render a create form which combines fields from more than one model. If it 
+# View to render a create form which combines fields from more than one model. If it
 # was just one model, then a simplier, CreateView would have been used instead
 
 def AnimalCreateView(request):
@@ -59,12 +59,12 @@ def AnimalCreateView(request):
             animal.save()
             # After a post request, you redirect to another page to prevent a continous loop of posting
             return HttpResponseRedirect(reverse('home_page') )
-    
+
     # This will capture get request
     else:
         # set the forms to show
         form = forms.AnimalCreateForm(prefix="sch")
-        sub_form = forms.AnimalInstanceCreateForm(prefix="loc") 
+        sub_form = forms.AnimalInstanceCreateForm(prefix="loc")
         # return the forms in the render to the animalcreate.html file
         # Within the template all we need to do then is {{ type form.as_p }} & {{}} sub_form.as_p }}
         return render(request, 'catalog/animalcreate.html', context={
@@ -89,3 +89,11 @@ class AnimalInstanceDeleteView(DeleteView):
     # When deleted, it will go back to the page you specify in success_url
     success_url = reverse_lazy('home_page')
     template_name = 'catalog/animal_instance_delete.html'
+
+
+def cagedetailview(request):
+    animal = AnimalInstance.objects.all().filter(status__exact='a')
+    context = {
+        'animal':animal,
+    }
+    return render(request, 'catalog/cagedetail.html',context)

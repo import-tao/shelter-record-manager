@@ -9,4 +9,5 @@ urlpatterns = [
     path('<name>/<int:pk>/update/', views.AnimalInstanceUpdateView.as_view(), name= "animal_instance_update"),
     path('<name>/<int:pk>/update/animal', views.AnimalTypeUpdateView.as_view(), name= 'animal_type_update'),
     path('<name>/<int:pk>/delete', views.AnimalInstanceDeleteView.as_view(), name= 'animal_instance_delete'),
+    path('building/<int:pk', views.cagedetailview, name='cage_detail')
 ]
