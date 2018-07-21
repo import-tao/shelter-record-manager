@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect
 from .models import AnimalInstance, Animal, Building
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, DeleteView, DetailView
+from django.db.models import Count
 from . import forms
 
 # Create your views here.
@@ -22,9 +23,17 @@ To do:
 # Homepage to show a list of all available animals
 def homepage(request):
     animal_instances_available= AnimalInstance.objects.filter(status__exact='a')
-
+    count_available = animal_instances_available.count()
+    animal_instances_reserved = AnimalInstance.objects.filter(status__exact='r')
+    count_reserved = animal_instances_reserved.count()
+    animal_instances_adopted = AnimalInstance.objects.filter(status__exact='d')
+    count_adopted = animal_instances_adopted.count()
     context_dict = {
-        "animal_instances_available": animal_instances_available,
+        'animal_instances_available': animal_instances_available,
+        'count_available':count_available,
+        'animal_instances_reserved':animal_instances_reserved,
+        'count_reserved':count_reserved,
+        'count_adopted':count_adopted,
     }
     return render(request, 'catalog/homepage.html', context= context_dict)
 
@@ -92,8 +101,16 @@ class AnimalInstanceDeleteView(DeleteView):
 
 
 def cagedetailview(request):
-    animal = AnimalInstance.objects.all().filter(status__exact='a')
+    occupied_cages = AnimalInstance.objects.all().filter(status__exact='a')
+    # Check if the cage stated is already occupied.
+    # get the cage from the form and then see if it exists in the below queryset -
+    # https://stackoverflow.com/questions/6554481/how-to-see-if-a-value-or-object-is-in-a-queryset-field
+    #Building.objects.filter(animalanstance__status='a')
+    unallocated_animals = AnimalInstance.objects.filter(status__exact='a').filter(cage__isnull=True)
+    vacant_cages = Building.objects.all().exclude(animalinstance__status='a')
     context = {
-        'animal':animal,
+        'occupied_cages':occupied_cages,
+        'unallocated_animals': unallocated_animals,
+        'vacant_cages': vacant_cages,
     }
     return render(request, 'catalog/cagedetail.html',context)

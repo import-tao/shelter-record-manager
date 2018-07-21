@@ -2,15 +2,17 @@
 {% block content %}
 <h1>In APP</h1>
 
-{% if animal_instances_available %}
 
+
+{% if animal_instances_available %}
+<p><strong>Available: </strong>{{ count_available }}</p>
 {% for animal in animal_instances_available %}
 <ul>
 <li>
       <p><a href="{{ animal.get_absolute_url }}"> {{ animal.name }}.</a> <a href="{{animal.get_update_url }}">Update</a> </p>
 </li>
-<a href="{{ animal.get_delete_url }}">Delete!?</a> 
-</ul>    
+<a href="{{ animal.get_delete_url }}">Delete!?</a>
+</ul>
 {% endfor %}
 
 <a href="{% url 'animal_create' %}">Create an animal</a>
@@ -19,5 +21,7 @@
 
 {% endif %}
 
+<p><strong>Reserved: </strong>{{ count_reserved }}</p>
+<p><strong>Adopted: </strong>{{ count_adopted }}</p>
 
 {% endblock %}

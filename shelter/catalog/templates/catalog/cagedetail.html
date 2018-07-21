@@ -5,12 +5,34 @@
 
 <h2>Cages</h2>
 <h3>Occupied</h3>
-{% if animal %}
-{% for ani in animal %}
+{% if occupied_cages %}
+{% for animal in occupied_cages %}
 <ul>
-    <li>{{ ani.cage }}, <a href={{ani.get_absolute_url }}>{{ani.name}}</a></li>
+    <li>{{ animal.cage }}, <a href={{animal.get_absolute_url }}>{{animal.name}}</a></li>
 </ul>
 {% endfor %}
+{% endif %}
+<h3>Vacant Cages</h3>
+{% if vacant_cages %}
+{% for cage in vacant_cages %}
+<ul>
+    <li>{{ cage }}</li>
+</ul>
+{% endfor %}
+{% else %}
+<p>There are no vacant cages</p>
+{% endif %}
+
+<h3>Unallocated Animals</h3>
+<p>These animals have an available status but have not been allocated a cage.</p>
+{% if unallocated_animals %}
+{% for animal in unoccupied_cages %}
+<ul>
+    <li>{{ animal.cage }}, <a href={{animal.get_absolute_url }}>{{animal.name}}</a></li>
+</ul>
+{% endfor %}
+{% else %}
+<p>There are no animals which need allocating.</p>
 {% endif %}
 
 {% endblock %}
