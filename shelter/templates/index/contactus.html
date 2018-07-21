@@ -1,0 +1,15 @@
+{% extends 'index/base.html' %}
+
+{% block content %}
+
+<h1>Contact Us</h1>
+<p>If you want to contact us, please complete the below form!   </p>
+
+<h2>Form</h2>
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p}}
+    <input type="submit" value="Send">
+</form>
+
+{% endblock %}

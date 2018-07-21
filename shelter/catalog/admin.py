@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Animal, Allergies, Animal, AnimalInstance, Building, Caretakers, Diet, Home_History, Medication, Shelter_Location, Color
+from .models import Animal, Allergies, Animal, AnimalInstance, Building, Caretakers, Diet, Home_History, Medication, Shelter_Location, Colour
 
 # Register your models here.
 # These is the basic way of registering the models to the admin site, make sure you import them above
@@ -7,7 +7,7 @@ admin.site.register(Animal)
 admin.site.register(Allergies)
 admin.site.register(Building)
 admin.site.register(Caretakers)
-admin.site.register(Color)
+admin.site.register(Colour)
 admin.site.register(Diet)
 admin.site.register(Home_History)
 admin.site.register(Medication)
