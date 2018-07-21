@@ -24,14 +24,16 @@
 {% endif %}
 
 <h3>Unallocated Animals</h3>
-<p>These animals have an available status but have not been allocated a cage.</p>
+
 {% if unallocated_animals %}
-{% for animal in unoccupied_cages %}
+<p>These animals have an available status but have not been allocated a cage.</p>
+{% for animal in unallocated_animals %}
 <ul>
-    <li>{{ animal.cage }}, <a href={{animal.get_absolute_url }}>{{animal.name}}</a></li>
+    <li><a href={{animal.get_absolute_url }}>{{animal.name}}</a></li>
 </ul>
 {% endfor %}
 {% else %}
+
 <p>There are no animals which need allocating.</p>
 {% endif %}
 

@@ -55,7 +55,6 @@
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <a class="dropdown-item" href="{% url 'home_page' %}">Dashboard</a>
             <a class="dropdown-item" href="{% url 'animal_create'%}">Add a New Animal</a>
-            <a class="dropdown-item" href="">Medication</a>
             <div class="dropdown-divider"></div>
           </div>
           <li class="nav-item dropdown active">
@@ -65,7 +64,7 @@
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href="{% url 'cage_detail' %}">Cage List</a>
-                <a class="dropdown-item" href="">Edit Cages</a>
+                <a class="dropdown-item" href="{% url 'building_create' %}">Add a cage</a>
                 <div class="dropdown-divider"></div>
               </div>
           {% endif %}

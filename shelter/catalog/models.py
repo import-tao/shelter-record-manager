@@ -119,6 +119,10 @@ class Building(models.Model):
     def __str__(self):
         return 'Cage {} {}'.format(self.cage, self.room)
 
+    def get_absolute_url(self):
+        from django.urls import reverse
+        return reverse("building_update", args=[str(self.id)])
+
 class Address(models.Model):
     number_or_name = models.CharField(max_length= 20, help_text= 'Please enter the house number or name.')
     street = models.CharField(max_length = 30, help_text= 'Street name')

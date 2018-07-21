@@ -92,6 +92,11 @@ class AnimalInstanceUpdateView(UpdateView):
     fields = '__all__'
     template_name = 'catalog/animal_instance_update.html'
 
+class BuildingUpdateView(UpdateView):
+    model = Building
+    fields = '__all__'
+    template_name = 'catalog/building_update.html'
+
 class AnimalInstanceDeleteView(DeleteView):
     model = AnimalInstance
     context_object_name = 'animal_instance'
@@ -99,14 +104,25 @@ class AnimalInstanceDeleteView(DeleteView):
     success_url = reverse_lazy('home_page')
     template_name = 'catalog/animal_instance_delete.html'
 
+def BuildingCreateView(request):
+    if request.POST:
+        form = forms.BuildingCreateForm(request.POST)
+        if form.is_valid():
+            form.save
+            return HttpResponseRedirect(reverse('home_page') )
+    else:
+        form = forms.BuildingCreateForm()
+        return render(request, 'catalog/building_create.html', context={
+            'form': form,
+            })
 
 def cagedetailview(request):
-    occupied_cages = AnimalInstance.objects.all().filter(status__exact='a')
+    occupied_cages = AnimalInstance.objects.all().filter(status__exact='a').filter(cage__isnull=False)
     # Check if the cage stated is already occupied.
     # get the cage from the form and then see if it exists in the below queryset -
     # https://stackoverflow.com/questions/6554481/how-to-see-if-a-value-or-object-is-in-a-queryset-field
     #Building.objects.filter(animalanstance__status='a')
-    unallocated_animals = AnimalInstance.objects.filter(status__exact='a').filter(cage__isnull=True)
+    unallocated_animals = AnimalInstance.objects.filter(status__exact='a').filter(cage__cage__isnull=True)
     vacant_cages = Building.objects.all().exclude(animalinstance__status='a')
     context = {
         'occupied_cages':occupied_cages,
