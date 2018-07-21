@@ -1,8 +1,10 @@
-from django.shortcuts import render, reverse
+from django.shortcuts import render, reverse, redirect
 from django.http import HttpResponseRedirect
 from django.core.mail import send_mail
 from .forms import ContactUsForm
 from secret_environment_keys import Config
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login as auth_login
 
 def index(request):
     return render(request, 'index/index.html')
@@ -35,3 +37,14 @@ def contact(request):
     else:
         form = ContactUsForm
         return render(request, 'index/contactus.html',{'form': form})
+
+def signup(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            auth_login(request, user)
+            return redirect('index')
+    else:
+        form = UserCreationForm()
+    return render(request, 'registration/signup.html', {'form': form})
