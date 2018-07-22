@@ -46,7 +46,7 @@ class BuildingCreateForm(forms.ModelForm):
     ********************************************************************
     '''
     def clean(self):
-        cleaned_data = super().clean()
+        cleaned_data = super(BuildingCreateForm, self).clean()
         room =  cleaned_data.get('room')
         cage = cleaned_data.get('cage')
         #if room and cage fields are valid...
@@ -56,7 +56,8 @@ class BuildingCreateForm(forms.ModelForm):
                 'This cage already exists. Please try again'
             )
         elif room and cage:
-            if room in Building.objects.all() and cage in Building.objects.all():
+            combined = room + cage
+            if combined in Building.objects.all():
                 raise forms.ValidationError(
                     'This room and cage combination is already in use. Please try again.'
                 )

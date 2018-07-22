@@ -104,11 +104,12 @@ class AnimalInstanceDeleteView(DeleteView):
     success_url = reverse_lazy('home_page')
     template_name = 'catalog/animal_instance_delete.html'
 
+
 def BuildingCreateView(request):
     if request.POST:
-        form = forms.BuildingCreateForm(request.POST)
+        form = forms.BuildingCreateForm(data=request.POST)
         if form.is_valid():
-            form.save
+            form.save()
             return HttpResponseRedirect(reverse('home_page') )
     else:
         form = forms.BuildingCreateForm()
