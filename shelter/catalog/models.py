@@ -83,7 +83,7 @@ class AnimalInstance(models.Model):
                                                          This may include distinctive markings, \
                                                         additional behaviour or care comments.')
     status= models.CharField(max_length= 1, choices=ADOPTION_STATUS, help_text='Select the best fit status for the animal.')
-    join_date= models.DateField(null=False, blank=False, help_text= 'Date animal started at the shelter.', default=timezone.now)
+    arrival_date= models.DateField(null=False, blank=False, help_text= 'Date animal started at the shelter.', default=timezone.now)
     leaving_date = models.DateField(null=True, blank=True, help_text= 'Date animal left the shelter.')
     gender= models.CharField(max_length= 6, blank= False, choices= GENDER_CHOICES, default='f')
     hair_type = models.CharField(max_length= 1, choices = HAIR_TYPE_CHOICES, help_text= 'Please select the type of hair it has.', blank= True)
@@ -113,8 +113,8 @@ class AnimalInstance(models.Model):
         return reverse('animal_instance_delete', args=[self.name, str(self.id)])
 
 class Building(models.Model):
-    room= models.CharField(max_length= 20, blank= True)
-    cage= models.CharField(max_length= 10, blank=False)
+    room= models.CharField(max_length= 20, blank= False)
+    cage= models.CharField(max_length= 10, blank= False)
 
     def __str__(self):
         return 'Cage {} {}'.format(self.cage, self.room)
@@ -122,6 +122,11 @@ class Building(models.Model):
     def get_absolute_url(self):
         from django.urls import reverse
         return reverse("building_update", args=[str(self.id)])
+
+    class Meta:
+        unique_together = (('room', 'cage'),)
+        ordering = ['cage']
+
 
 class Address(models.Model):
     number_or_name = models.CharField(max_length= 20, help_text= 'Please enter the house number or name.')

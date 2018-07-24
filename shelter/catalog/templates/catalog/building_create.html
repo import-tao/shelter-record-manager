@@ -2,14 +2,16 @@
 <title>Add a new building info!</title> {% endblock %} {% block content %}
 
 <h1>This is the test.html</h1>
+{% if error %}
+<div class="alert alert-danger" role="alert" >
+{{ error }}
+</div>
+{% endif %}
 
-<form action="" method="post">
+<h2>New Cage</h2>
+<form action="." method="post">
     {% csrf_token %}
-
-    <h2>New Cage</h2>
-
     {{ form.as_p }}
-
 
     <input type="submit" value="Save">
 </form>

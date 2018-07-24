@@ -31,7 +31,7 @@ ALLOWED_HOSTS = []
 
 DATE_INPUT_FORMATS = 'd/m/Y'
 DATE_FORMAT = 'D N Y'
-DATETIME_FORMAT = 'D N Y, H:i' 
+DATETIME_FORMAT = 'D N Y, H:i'
 TIME_FORMAT = 'H:i'
 
 # Application definition
@@ -137,3 +137,5 @@ DEFAULT_FROM_EMAIL = Config.DEFAULT_FROM_EMAIL
 # Settings to receive server errors to email
 ADMINS = Config.ADMINS
 MANAGERS = ADMINS
+
+LOGOUT_REDIRECT_URL = 'index'

@@ -1,4 +1,5 @@
 from django import forms, forms
+from django.core.exceptions import NON_FIELD_ERRORS
 from catalog.models import Animal, AnimalInstance, Building, Colour, Shelter_Location, Caretakers, Medication, Allergies
 
 class AnimalCreateForm(forms.ModelForm):
@@ -35,32 +36,20 @@ class BuildingCreateForm(forms.ModelForm):
             'room',
             'cage',
         ]
-    '''override the validation for this so that we can check if the new
-     form contains a room/cage combination already saved to the database
-    ********************************************************************
-    ********************************************************************
-    ********************************************************************
-    ***********TO DO as it is not currently working*********************
-    ********************************************************************
-    ********************************************************************
-    ********************************************************************
-    '''
+        error_messages = {
+            NON_FIELD_ERRORS: {
+                'unique_together': "Cage and room already exist.",
+            }
+        }
+
     def clean(self):
-        cleaned_data = super(BuildingCreateForm, self).clean()
-        room =  cleaned_data.get('room')
-        cage = cleaned_data.get('cage')
-        #if room and cage fields are valid...
-        if cage:
-            if cage in Building.objects.all():
-                raise forms.ValidationError(
-                'This cage already exists. Please try again'
-            )
-        elif room and cage:
-            combined = room + cage
-            if combined in Building.objects.all():
-                raise forms.ValidationError(
-                    'This room and cage combination is already in use. Please try again.'
-                )
+        cleaned_data = self.cleaned_data
+        if Building.objects.filter(room=cleaned_data['room'],
+                                   cage=cleaned_data['cage']).exists():
+            raise forms.ValidationError(
+                  'This cage and room combination already exist.')
+        # Always return cleaned_data
+        return cleaned_data
 
 class ShelterLocationCreateForm(forms.ModelForm):
     class Meta:

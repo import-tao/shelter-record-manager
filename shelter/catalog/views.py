@@ -106,11 +106,17 @@ class AnimalInstanceDeleteView(DeleteView):
 
 
 def BuildingCreateView(request):
-    if request.POST:
+    form = forms.BuildingCreateForm()
+    if request.method == 'POST':
         form = forms.BuildingCreateForm(data=request.POST)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse('home_page') )
+        else:
+            error_message = 'This room and cage already exist'
+            form = forms.BuildingCreateForm()
+            return render(request, 'catalog/building_create.html', context= {'form':form, 'error':error_message})
+
     else:
         form = forms.BuildingCreateForm()
         return render(request, 'catalog/building_create.html', context={

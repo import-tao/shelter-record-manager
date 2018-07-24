@@ -12,6 +12,9 @@ def index(request):
 def about(request):
     return render(request, 'index/about.html')
 
+def features(request):
+    return render(request, 'index/features.html')
+
 def contact(request):
     form_class = ContactUsForm()
 

@@ -10,7 +10,7 @@
 <p>
     <strong>Summary: </strong> {{ animal_instance.bio }}</p>
 <p>
-    <strong>Join Date: </strong>{{ animal_instance.join_date|date:'d N Y' }}</p>
+    <strong>Join Date: </strong>{{ animal_instance.arrival_date|date:'d N Y' }}</p>
 <!-- Similar to models, when accessing a dictionary you need to use .get_*FIELD*_display but without parenthesis at the end to pull through the value, and not the key-->
 <p>
 <strong>Gender: </strong>{{ animal_instance.get_gender_display }}</p>

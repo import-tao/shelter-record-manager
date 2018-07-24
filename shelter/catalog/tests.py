@@ -17,7 +17,7 @@ class PageResponse(TestCase):
         AnimalInstance.objects.create(
             name = 'Dexter',
             status = 'a',
-            join_date = datetime.now().date(),
+            arrival_date = datetime.now().date(),
             gender = 'm',
             species = ani,
             cage = build,

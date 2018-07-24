@@ -28,6 +28,7 @@ urlpatterns = [
     path('signup/', views.signup, name='signup'),
     path('about', views.about, name= 'about'),
     path('contact', views.contact, name= 'contactus'),
+    path('features', views.features, name= 'features'),
     path('app/', include('catalog.urls')),
     # This accounts path allows us to use the built in django login system
     path('accounts/', include('django.contrib.auth.urls')),
