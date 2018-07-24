@@ -92,10 +92,10 @@ class AnimalInstanceUpdateView(UpdateView):
     fields = '__all__'
     template_name = 'catalog/animal_instance_update.html'
 
-class BuildingUpdateView(UpdateView):
+class CageUpdateView(UpdateView):
     model = Building
     fields = '__all__'
-    template_name = 'catalog/building_update.html'
+    template_name = 'catalog/cage_update.html'
 
 class AnimalInstanceDeleteView(DeleteView):
     model = AnimalInstance
@@ -104,8 +104,14 @@ class AnimalInstanceDeleteView(DeleteView):
     success_url = reverse_lazy('home_page')
     template_name = 'catalog/animal_instance_delete.html'
 
+class CageDeleteView(DeleteView):
+    model = Building
+    context_object_name = 'cage'
+    # When deleted, it will go back to the page you specify in success_url
+    success_url = reverse_lazy('home_page')
+    template_name = 'catalog/cage_delete.html'
 
-def BuildingCreateView(request):
+def CageCreateView(request):
     form = forms.BuildingCreateForm()
     if request.method == 'POST':
         form = forms.BuildingCreateForm(data=request.POST)
@@ -115,11 +121,11 @@ def BuildingCreateView(request):
         else:
             error_message = 'This room and cage already exist'
             form = forms.BuildingCreateForm()
-            return render(request, 'catalog/building_create.html', context= {'form':form, 'error':error_message})
+            return render(request, 'catalog/cage_create.html', context= {'form':form, 'error':error_message})
 
     else:
         form = forms.BuildingCreateForm()
-        return render(request, 'catalog/building_create.html', context={
+        return render(request, 'catalog/cage_create.html', context={
             'form': form,
             })
 
@@ -136,4 +142,4 @@ def cagedetailview(request):
         'unallocated_animals': unallocated_animals,
         'vacant_cages': vacant_cages,
     }
-    return render(request, 'catalog/cagedetail.html',context)
+    return render(request, 'catalog/cage_detail.html',context)

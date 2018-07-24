@@ -10,6 +10,8 @@ urlpatterns = [
     path('<name>/<int:pk>/update/animal', views.AnimalTypeUpdateView.as_view(), name= 'animal_type_update'),
     path('<name>/<int:pk>/delete', views.AnimalInstanceDeleteView.as_view(), name= 'animal_instance_delete'),
     path('building/', views.cagedetailview, name='cage_detail'),
-    path('building/create/', views.BuildingCreateView, name='building_create')
-    #path('building/update/<int:pk>', views.BuildingUpdateView.as_view(), name='building_update'),
+    path('building/create/', views.CageCreateView, name='cage_create'),
+    path('building/<room>/<int:pk>/', views.CageUpdateView.as_view(), name='cage_update'),
+    path('building/<room>/<int:pk>/delete/', views.CageDeleteView.as_view(), name='cage_delete'),
+    #path('building/update/<int:pk>', views.BuildingUpdateView.as_view(), name='cage_update'),
 ]

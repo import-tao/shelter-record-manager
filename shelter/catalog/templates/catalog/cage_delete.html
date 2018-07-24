@@ -1,0 +1,17 @@
+{% extends 'catalog/base.html' %}
+
+{% block title %}
+<title>Delete {{ cage }}</title>
+{% endblock %}
+{% block content %}
+
+<h1> Remove Cage </h1>
+
+<p>Are you sure you want to delete the cage: {{ cage.room }} {{ cage.cage }}?</p>
+
+<form action="" method="POST">
+  {% csrf_token %}
+  <input type="submit" action="" value="Yes, delete." />
+</form>
+
+{% endblock %}

@@ -119,9 +119,13 @@ class Building(models.Model):
     def __str__(self):
         return 'Cage {} {}'.format(self.cage, self.room)
 
-    def get_absolute_url(self):
+    def get_cage_url(self):
         from django.urls import reverse
-        return reverse("building_update", args=[str(self.id)])
+        return reverse("cage_update", args=[self.room, str(self.id)])
+
+    def get_cage_delete_url(self):
+        from django.urls import reverse
+        return reverse('cage_delete', args=[self.room, str(self.id)])
 
     class Meta:
         unique_together = (('room', 'cage'),)
