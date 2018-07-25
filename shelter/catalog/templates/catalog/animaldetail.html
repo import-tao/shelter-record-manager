@@ -1,6 +1,12 @@
 {% extends "catalog/base.html" %}
 {% block title %}<title>{{ animal_instance.name }}'s profile</title> {% endblock %}
 {% block content %}
+<nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item "><a href="{% url 'home_page' %}">Dashboard</a></li>
+            <li class="breadcrumb-item active" aria-current="page" aria-label="breadcrumb">Animal Profile</li>
+        </ol>
+      </nav>
 <!--animal_instance is being used as this has been specified within the views as the context object name-->
 <h1>{{ animal_instance.name }}</h1>
 

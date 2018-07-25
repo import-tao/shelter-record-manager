@@ -36,11 +36,6 @@ class BuildingCreateForm(forms.ModelForm):
             'room',
             'cage',
         ]
-        error_messages = {
-            NON_FIELD_ERRORS: {
-                'unique_together': "Cage and room already exist.",
-            }
-        }
 
     def clean(self):
         cleaned_data = self.cleaned_data

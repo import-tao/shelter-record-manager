@@ -1,13 +1,18 @@
 {% extends 'catalog/base.html' %}
 {% block content %}
-
+<nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item "><a href="{% url 'home_page' %}">Dashboard</a></li>
+            <li class="breadcrumb-item active" aria-current="page" aria-label="breadcrumb">Update Animal</li>
+        </ol>
+      </nav>
 <form action="" method="post">
     {% csrf_token %}
     <table>
     {{ form.as_table }}
     </table>
     <input type="submit" value="Save" />
-    
+
 </form>
 
 

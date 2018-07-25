@@ -1,7 +1,12 @@
 {% extends "catalog/base.html" %}
 {% block title %}<title>Building View</title> {% endblock %}
 {% block content %}
-
+<nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item "><a href="{% url 'home_page' %}">Dashboard</a></li>
+            <li class="breadcrumb-item active" aria-current="page" aria-label="breadcrumb">Cage List</li>
+        </ol>
+      </nav>
 
 <h2>Cages</h2>
 <h3>Occupied</h3>

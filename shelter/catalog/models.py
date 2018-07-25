@@ -128,7 +128,6 @@ class Building(models.Model):
         return reverse('cage_delete', args=[self.room, str(self.id)])
 
     class Meta:
-        unique_together = (('room', 'cage'),)
         ordering = ['cage']
 
 

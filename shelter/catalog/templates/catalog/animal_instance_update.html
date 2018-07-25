@@ -1,5 +1,11 @@
 {% extends 'catalog/base.html' %}
 {% block content %}
+<nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item "><a href="{% url 'home_page' %}">Dashboard</a></li>
+            <li class="breadcrumb-item active" aria-current="page" aria-label="breadcrumb">Animal Update</li>
+        </ol>
+      </nav>
 <p>To change the type of animal, species or colour then just click <a href="">here</a>.</p>
 <form action="" method="post">
     {% csrf_token %}
@@ -7,7 +13,7 @@
     {{ form.as_table }}
     </table>
     <input type="submit" value="Save" />
-    
+
 </form>
 
 

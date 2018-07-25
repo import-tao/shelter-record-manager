@@ -4,7 +4,13 @@
 <title>Delete {{ cage }}</title>
 {% endblock %}
 {% block content %}
-
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a href="{% url 'home_page' %}">Dashboard</a></li>
+        <li class="breadcrumb-item "><a href="{% url 'cage_detail' %}">Cage List</a></li>
+        <li class="breadcrumb-item active" aria-current="page" aria-label="breadcrumb">Cage Delete</li>
+    </ol>
+  </nav>
 <h1> Remove Cage </h1>
 
 <p>Are you sure you want to delete the cage: {{ cage.room }} {{ cage.cage }}?</p>

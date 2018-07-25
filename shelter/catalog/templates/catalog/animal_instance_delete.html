@@ -1,10 +1,15 @@
 {% extends 'catalog/base.html' %}
 
-{% block title %} 
+{% block title %}
 <title>Delete {{ animal_instance.name }}</title>
 {% endblock %}
 {% block content %}
-
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a href="{% url 'home_page' %}">Dashboard</a></li>
+        <li class="breadcrumb-item active" aria-current="page" aria-label="breadcrumb">Delete Animal</li>
+    </ol>
+  </nav>
 <h1>Delete Animal</h1>
 
 <p>Are you sure you want to delete the animal: {{ animal_instance.name }}?</p>
