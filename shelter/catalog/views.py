@@ -119,9 +119,7 @@ def CageCreateView(request):
             form.save()
             return HttpResponseRedirect(reverse('home_page') )
         else:
-            error_message = 'This room and cage already exist'
-            form = forms.BuildingCreateForm()
-            return render(request, 'catalog/cage_create.html', context= {'form':form, 'error':error_message})
+            return render(request, 'catalog/cage_create.html', context= {'form':form})
 
     else:
         form = forms.BuildingCreateForm()
