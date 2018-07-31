@@ -1,32 +1,105 @@
 {% extends 'catalog/base.html' %}
 {% block content %}
+<div class="container">
 <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item active" aria-current="page" aria-label="breadcrumb">Dashboard</li>
       </ol>
     </nav>
-<h1>In APP</h1>
 
-
+<div class='row justify-content-sm-start col-12'>
+  <div class="col-sm">
+    <p><strong>Available: </strong>{{ count_available }}</p>
+  </div>
+  <div class="col-sm">
+    <p><strong>Reserved: </strong>{{ count_reserved }}</p>
+  </div>
+    <div class="col-sm">
+    <p><strong>Adopted: </strong>{{ count_adopted }}</p>
+  </div>
+  <div class="col-sm">
+      <p><strong>Quarantined: </strong>{{ count_quarantine }}</p>
+    </div>
+  </div>
 
 {% if animal_instances_available %}
-<p><strong>Available: </strong>{{ count_available }}</p>
+<h2>Available Animals</h2>
 {% for animal in animal_instances_available %}
-<ul>
-<li>
-      <p><a href="{{ animal.get_absolute_url }}"> {{ animal.name }}.</a> <a href="{{animal.get_update_url }}">Update</a> </p>
-</li>
-<a href="{{ animal.get_delete_url }}">Delete!?</a>
-</ul>
+<div class="container ">
+  <div class="row justify-content-sm-center col-3 border-bottom border-success">
+    <div class="col-3">
+        <a href="{{ animal.get_absolute_url }}"> {{ animal.name }}</a>
+    </div>
+  </div>
+<div class="row justify-content-sm-start col-6">
+  <div class="col-2">
+      <a href="{{animal.get_update_url }}">Update</a>
+  </div>
+  <div class="col-2">
+      <a href="{{ animal.get_adopt_url }}">Adopt?</a>
+  </div>
+  <div class="col-2">
+      <a href="{{ animal.get_delete_url }}">Delete!?</a>
+  </div>
+</div>
+</div>
 {% endfor %}
+{% else %}
+<p>There are no animals available. Click <a href="{% url 'animal_create' %}">here</a> to add one!</p>
 
 <a href="{% url 'animal_create' %}">Create an animal</a>
-{% else %}
-<p>There are no animals... yet. Click <a href="{% url 'animal_create' %}">here</a> to add one!</p>
-
+{% endif %}
+{% if animal_instances_reserved %}
+<h2>Reserved Animals</h2>
+{% for animals in animal_instances_reserved %}
+<div class="container ">
+    <div class="row justify-content-sm-center col-3 border-bottom border-success">
+      <div class="col-3">
+          <a href="{{ animal.get_absolute_url }}"> {{ animal.name }}</a>
+      </div>
+    </div>
+  <div class="row justify-content-sm-start col-6">
+    <div class="col-2">
+        <a href="{{animal.get_update_url }}">Update</a>
+    </div>
+    <div class="col-2">
+        <a href="{{ animal.get_adopt_url }}">Adopt?</a>
+    </div>
+    <div class="col-2">
+        <a href="{{ animal.get_delete_url }}">Delete!?</a>
+    </div>
+  </div>
+  </div>
+{% endfor %}
 {% endif %}
 
-<p><strong>Reserved: </strong>{{ count_reserved }}</p>
-<p><strong>Adopted: </strong>{{ count_adopted }}</p>
 
+{% if animal_instances_quarantine %}
+<h2>Quarantined Animals</h2>
+{% for animal in animal_instances_quarantine %}
+<div class="container ">
+    <div class="row justify-content-sm-center col-3 border-bottom border-success">
+      <div class="col-3">
+          <a href="{{ animal.get_absolute_url }}"> {{ animal.name }}</a>
+      </div>
+    </div>
+  <div class="row justify-content-sm-start col-6">
+    <div class="col-2">
+        <a href="{{animal.get_update_url }}">Update</a>
+    </div>
+    <div class="col-2">
+        <a href="{{ animal.get_adopt_url }}">Adopt?</a>
+    </div>
+    <div class="col-2">
+        <a href="{{ animal.get_delete_url }}">Delete!?</a>
+    </div>
+  </div>
+  </div>
+
+{% endfor %}
+{% endif %}
+
+
+
+</div>
 {% endblock %}

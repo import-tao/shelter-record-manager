@@ -1,10 +1,15 @@
-from django.shortcuts import render, render_to_response, reverse
+from django.shortcuts import render, render_to_response, reverse, get_object_or_404
 from django.http import HttpResponseRedirect
-from .models import AnimalInstance, Animal, Building
+from .models import AnimalInstance, Animal, Building, Caretakers
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, DeleteView, DetailView
 from django.db.models import Count
 from . import forms
+
+# Login imports - login required is for function based views
+# Mixin is for class based views and is passed as an argument
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
 '''
@@ -21,11 +26,15 @@ To do:
  colour remains in its own model but gets linked straight into AnimalInstance model
 '''
 # Homepage to show a list of all available animals
-def homepage(request):
+
+@login_required
+def homepage_view(request):
     animal_instances_available= AnimalInstance.objects.filter(status__exact='a')
     count_available = animal_instances_available.count()
     animal_instances_reserved = AnimalInstance.objects.filter(status__exact='r')
     count_reserved = animal_instances_reserved.count()
+    animal_instances_quarantine = AnimalInstance.objects.filter(status__exact='q')
+    count_quarantine = animal_instances_quarantine.count()
     animal_instances_adopted = AnimalInstance.objects.filter(status__exact='d')
     count_adopted = animal_instances_adopted.count()
     context_dict = {
@@ -33,18 +42,21 @@ def homepage(request):
         'count_available':count_available,
         'animal_instances_reserved':animal_instances_reserved,
         'count_reserved':count_reserved,
+        'animal_instances_quarantine': animal_instances_quarantine,
+        'count_quarantine': count_quarantine,
         'count_adopted':count_adopted,
     }
     return render(request, 'catalog/homepage.html', context= context_dict)
 
-class AnimalDetailView(DetailView):
+
+class AnimalDetailView(LoginRequiredMixin,DetailView):
     model = AnimalInstance
     template_name = 'catalog/animaldetail.html'
     context_object_name = 'animal_instance'
 
 # View to render a create form which combines fields from more than one model. If it
 # was just one model, then a simplier, CreateView would have been used instead
-
+@login_required
 def AnimalCreateView(request):
     # Check to see if a POST has been submitted. Using GET to submit forms?
     # Don't do it. Use POST.
@@ -82,36 +94,63 @@ def AnimalCreateView(request):
             })
 
 # View for updating the Animal Model
-class AnimalTypeUpdateView(UpdateView):
+@login_required
+def animalinstanceadoptview(request, name, pk):
+    if request.method == 'POST':
+        form = forms.AnimalInstanceAdoptForm(request.POST, prefix="ani")
+        sub_form = forms.NewCartakerAdoptForm(request.POST, prefix="care")
+        if form.is_valid() and sub_form.is_valid:
+            animal = form.save(commit=False)
+            animal.caretaker = sub_form.save()
+            animal.save()
+            return HttpResponseRedirect(reverse('home_page'))
+        else:
+            return render(request, 'catalog/adopt_animal.html', context = {'form':form,'sub_form':sub_form})
+    else:
+        form = forms.AnimalInstanceAdoptForm(instance=get_object_or_404(AnimalInstance, id=pk), prefix="ani")
+        sub_form = forms.NewCartakerAdoptForm(instance=get_object_or_404(AnimalInstance, id=pk), prefix="care")
+        context = {
+            'form':form,
+            'sub_form':sub_form,
+        }
+        return render(request, 'catalog/adopt_animal.html', context)
+
+
+class AnimalTypeUpdateView(LoginRequiredMixin, UpdateView):
     model = Animal
     fields = '__all__'
 
 # View for updating the AnimalInstance Model
-class AnimalInstanceUpdateView(UpdateView):
+
+class AnimalInstanceUpdateView(LoginRequiredMixin, UpdateView):
     model = AnimalInstance
     fields = '__all__'
     template_name = 'catalog/animal_instance_update.html'
 
-class CageUpdateView(UpdateView):
+
+class CageUpdateView(LoginRequiredMixin, UpdateView):
     model = Building
     fields = '__all__'
     template_name = 'catalog/cage_update.html'
 
-class AnimalInstanceDeleteView(DeleteView):
+
+class AnimalInstanceDeleteView(LoginRequiredMixin, DeleteView):
     model = AnimalInstance
     context_object_name = 'animal_instance'
     # When deleted, it will go back to the page you specify in success_url
     success_url = reverse_lazy('home_page')
     template_name = 'catalog/animal_instance_delete.html'
 
-class CageDeleteView(DeleteView):
+
+class CageDeleteView(LoginRequiredMixin, DeleteView):
     model = Building
     context_object_name = 'cage'
     # When deleted, it will go back to the page you specify in success_url
     success_url = reverse_lazy('home_page')
     template_name = 'catalog/cage_delete.html'
 
-def CageCreateView(request):
+@login_required
+def cagecreateview(request):
     form = forms.BuildingCreateForm()
     if request.method == 'POST':
         form = forms.BuildingCreateForm(data=request.POST)
@@ -127,6 +166,7 @@ def CageCreateView(request):
             'form': form,
             })
 
+@login_required
 def cagedetailview(request):
     occupied_cages = AnimalInstance.objects.all().filter(status__exact='a').filter(cage__isnull=False)
     # Check if the cage stated is already occupied.
@@ -141,3 +181,13 @@ def cagedetailview(request):
         'vacant_cages': vacant_cages,
     }
     return render(request, 'catalog/cage_detail.html',context)
+
+@login_required
+def adopted_animals_view(request):
+    animal_instances_adopted = AnimalInstance.objects.filter(status__exact='d')
+    count_adopted = animal_instances_adopted.count()
+    context_dict = {
+        'animal_instances_adopted': animal_instances_adopted,
+        'count_adopted': count_adopted,
+        }
+    return render(request, 'catalog/adopted_animals.html', context=context_dict)

@@ -112,6 +112,10 @@ class AnimalInstance(models.Model):
         from django.urls import reverse
         return reverse('animal_instance_delete', args=[self.name, str(self.id)])
 
+    def get_adopt_url(self):
+        from django.urls import reverse
+        return reverse('adopt_new', args=[self.name, str(self.id)])
+
 class Building(models.Model):
     room= models.CharField(max_length= 20, blank= False)
     cage= models.CharField(max_length= 10, blank= False)
@@ -167,10 +171,10 @@ class Home_History(Address):
         verbose_name_plural = 'Prior Address'
 
 class Caretakers(Address):
-    first_name = models.CharField(max_length = 30)
-    last_name = models.CharField(max_length= 30)
-    email = models.EmailField(help_text='Please enter a valid email address', blank=True)
-    contactnumber1 = models.IntegerField(help_text= 'The primary contact number.')
+    first_name = models.CharField(max_length = 30, blank=False)
+    last_name = models.CharField(max_length= 30, blank= False)
+    email = models.EmailField(help_text='Please enter a valid email address', blank=False)
+    contactnumber1 = models.IntegerField(help_text= 'The primary contact number.', blank =False)
     contactnumber2 = models.IntegerField(help_text= 'The secondary contact number.')
 
     def __str__(self):
