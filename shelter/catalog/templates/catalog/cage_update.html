@@ -3,10 +3,13 @@
 <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item "><a href="{% url 'home_page' %}">Dashboard</a></li>
-            <li class="breadcrumb-item active" aria-current="page" aria-label="breadcrumb">Animal Update</li>
+            <li class="breadcrumb-item "><a href="{% url 'cage_detail' %}">Cage List</a></li>
+            <li class="breadcrumb-item active" aria-current="page" aria-label="breadcrumb">Cage Update</li>
         </ol>
       </nav>
-<p>To change the type of animal, species or colour then just click <a href="">here</a>.</p>
+<br>
+<div>
+
 <form action="" method="post">
     {% csrf_token %}
     <table>
@@ -15,6 +18,7 @@
     <input type="submit" value="Save" />
 
 </form>
-
+<a href="{{ building.get_cage_delete_url }}">Delete?</a>
+</div>
 
 {% endblock %}

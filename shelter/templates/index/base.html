@@ -41,7 +41,7 @@
             More Info
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="">Features</a>
+            <a class="dropdown-item" href="{% url 'features' %}">Features</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="{% url 'about' %}">About Us</a>
             <a class="dropdown-item" href="{% url 'contactus' %}">Contact Us</a>
@@ -55,8 +55,8 @@
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <a class="dropdown-item" href="{% url 'home_page' %}">Dashboard</a>
             <a class="dropdown-item" href="{% url 'animal_create'%}">Add a New Animal</a>
-            <a class="dropdown-item" href="">Medication</a>
             <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="{% url 'adopted_animals' %}">Adopted Animals</a>
           </div>
           <li class="nav-item dropdown active">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
@@ -65,7 +65,7 @@
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href="{% url 'cage_detail' %}">Cage List</a>
-                <a class="dropdown-item" href="">Edit Cages</a>
+                <a class="dropdown-item" href="{% url 'cage_create' %}">Add a cage</a>
                 <div class="dropdown-divider"></div>
               </div>
           {% endif %}
@@ -76,9 +76,22 @@
         If they are, it shows either to login or logout and the next part will return the user
         back to the page-->
         {% if user.is_authenticated %}
-        <a class="nav-link" href="{% url 'logout' %}?next={{request.path}}">Logout</a>
+        <li class="nav-item dropdown active">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false">
+            {{ user.username }}
+          </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="">My Profile</a>
+          <a class="dropdown-item" href="">Change Password</a>
+          <div class="dropdown-divider"></div>
+          <a class="nav-link" href="{% url 'logout' %}">  Logout</a>
+        </div>
         {% else %}
-        <a class="nav-link" href="{% url 'login' %}?next={{request.path}}">Login</a>
+        <form class="form-inline ml-auto">
+          <a href="{% url 'login' %}?next={{request.path}}" class="btn btn-outline-secondary">Log in</a>
+          <a href="{% url 'signup' %}" class="btn btn-primary ml-2">Sign up</a>
+          </form>
         {% endif %}
       </li>
     </div>

@@ -1,0 +1,24 @@
+{% extends 'catalog/base.html' %} {% block title %}
+<title>Adopted Animals</title> {% endblock %} {% block content %}
+    <div class="container">
+<h2>Adopted Animals</h2>
+{% if animal_instances_adopted %}
+{% for animal in animal_instances_adopted %}
+<div class="container ">
+    <div class="row justify-content-sm-center col-3 border-bottom border-success">
+        <div>
+            <a href="{{ animal.get_absolute_url }}"> {{ animal.name }}</a>
+        </div>
+    </div>
+    <div class="row justify-content-sm-center col-4">
+        <div class="col-6">
+            <a href="{{animal.get_update_url }}">Update</a>
+        </div>
+        <div class="col-6">
+            <a href="{{ animal.get_delete_url }}">Delete!?</a>
+        </div>
+    </div>
+</div>
+{% endfor %} {% else %}
+<p>There are no adopted animals.</p>
+{% endif %} </div>{% endblock %}

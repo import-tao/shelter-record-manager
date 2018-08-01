@@ -83,7 +83,7 @@ class AnimalInstance(models.Model):
                                                          This may include distinctive markings, \
                                                         additional behaviour or care comments.')
     status= models.CharField(max_length= 1, choices=ADOPTION_STATUS, help_text='Select the best fit status for the animal.')
-    join_date= models.DateField(null=False, blank=False, help_text= 'Date animal started at the shelter.', default=timezone.now)
+    arrival_date= models.DateField(null=False, blank=False, help_text= 'Date animal started at the shelter.', default=timezone.now)
     leaving_date = models.DateField(null=True, blank=True, help_text= 'Date animal left the shelter.')
     gender= models.CharField(max_length= 6, blank= False, choices= GENDER_CHOICES, default='f')
     hair_type = models.CharField(max_length= 1, choices = HAIR_TYPE_CHOICES, help_text= 'Please select the type of hair it has.', blank= True)
@@ -112,12 +112,28 @@ class AnimalInstance(models.Model):
         from django.urls import reverse
         return reverse('animal_instance_delete', args=[self.name, str(self.id)])
 
+    def get_adopt_url(self):
+        from django.urls import reverse
+        return reverse('adopt_new', args=[self.name, str(self.id)])
+
 class Building(models.Model):
-    room= models.CharField(max_length= 20, blank= True)
-    cage= models.CharField(max_length= 10, blank=False)
+    room= models.CharField(max_length= 20, blank= False)
+    cage= models.CharField(max_length= 10, blank= False)
 
     def __str__(self):
         return 'Cage {} {}'.format(self.cage, self.room)
+
+    def get_cage_url(self):
+        from django.urls import reverse
+        return reverse("cage_update", args=[self.room, str(self.id)])
+
+    def get_cage_delete_url(self):
+        from django.urls import reverse
+        return reverse('cage_delete', args=[self.room, str(self.id)])
+
+    class Meta:
+        ordering = ['cage']
+
 
 class Address(models.Model):
     number_or_name = models.CharField(max_length= 20, help_text= 'Please enter the house number or name.')
@@ -155,10 +171,10 @@ class Home_History(Address):
         verbose_name_plural = 'Prior Address'
 
 class Caretakers(Address):
-    first_name = models.CharField(max_length = 30)
-    last_name = models.CharField(max_length= 30)
-    email = models.EmailField(help_text='Please enter a valid email address', blank=True)
-    contactnumber1 = models.IntegerField(help_text= 'The primary contact number.')
+    first_name = models.CharField(max_length = 30, blank=False)
+    last_name = models.CharField(max_length= 30, blank= False)
+    email = models.EmailField(help_text='Please enter a valid email address', blank=False)
+    contactnumber1 = models.IntegerField(help_text= 'The primary contact number.', blank =False)
     contactnumber2 = models.IntegerField(help_text= 'The secondary contact number.')
 
     def __str__(self):

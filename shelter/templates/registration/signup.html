@@ -1,0 +1,16 @@
+{% extends 'index/base.html' %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<p>You are already signed up, please go to a different page.</p>
+{% else %}
+  <div class="container">
+    <h2>Sign up</h2>
+    <form method="post" novalidate>
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn btn-primary">Create an account</button>
+    </form>
+  </div>
+{% endif %}
+{% endblock %}

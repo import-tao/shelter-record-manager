@@ -1,9 +1,11 @@
-{% extends "catalog/base.html" %} {% block title %}
-<title>Add a new Animal!</title> {% endblock %} {% block content %}
+{% extends 'catalog/base.html' %}
+
+{% block title %}
+<title>Adopt an animal</title> {% endblock %} {% block content %}
 <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item "><a href="{% url 'home_page' %}">Dashboard</a></li>
-            <li class="breadcrumb-item active" aria-current="page" aria-label="breadcrumb">New Animal</li>
+            <li class="breadcrumb-item active" aria-current="page" aria-label="breadcrumb">Adopt</li>
         </ol>
       </nav>
 <h1>This is the test.html</h1>
@@ -15,10 +17,10 @@
 
     {{ form.as_p }}
 
-    <h2>Second Form</h2>
+    <h2>Caretaker Details</h2>
 
     {{ sub_form.as_p }}
 
-    <input type="submit" value="Save">
+    <input type="submit" value="Adopt!">
 </form>
 {% endblock %}
