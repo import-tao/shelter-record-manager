@@ -1,9 +1,10 @@
 from django.shortcuts import render, render_to_response, reverse, get_object_or_404
 from django.http import HttpResponseRedirect
-from .models import AnimalInstance, Animal, Building, Caretakers
-from django.urls import reverse_lazy
+from .models import AnimalInstance, Building, Allergies, Medication
+from django.urls import reverse_lazy, resolve
 from django.views.generic import CreateView, UpdateView, DeleteView, DetailView
-from django.db.models import Count
+from datetime import datetime
+from django.db.models import Count, Q
 from . import forms
 
 # Login imports - login required is for function based views
@@ -54,84 +55,98 @@ class AnimalDetailView(LoginRequiredMixin,DetailView):
     template_name = 'catalog/animaldetail.html'
     context_object_name = 'animal_instance'
 
-# View to render a create form which combines fields from more than one model. If it
-# was just one model, then a simplier, CreateView would have been used instead
+
 @login_required
 def AnimalCreateView(request):
     # Check to see if a POST has been submitted. Using GET to submit forms?
     # Don't do it. Use POST.
     if request.POST:
-        # Load up our two forms using the prefix keyword argument.
-        # prefix is needed as there is more than one model for the page
-        form = forms.AnimalCreateForm(request.POST, prefix="ani")
-        sub_form = forms.AnimalInstanceCreateForm(request.POST, prefix="loc")
-
-        # Ensure both forms are valid before continuing on
-        if form.is_valid() and sub_form.is_valid():
+        form = forms.AnimalInstanceCreateForm(request.POST)
+        if form.is_valid():
             # Prepare the animal model, but don't commit it to the database
             # just yet.
             animal = form.save(commit=False)
-
-            # Add the location ForeignKey by saving the secondary form we
-            # setup
-            animal.species = sub_form.save()
-
             # Save the main object and continue on our merry way.
             animal.save()
             # After a post request, you redirect to another page to prevent a continous loop of posting
             return HttpResponseRedirect(reverse('home_page') )
-
     # This will capture get request
     else:
         # set the forms to show
-        form = forms.AnimalCreateForm(prefix="sch")
-        sub_form = forms.AnimalInstanceCreateForm(prefix="loc")
+        form = forms.AnimalInstanceCreateForm()
         # return the forms in the render to the animalcreate.html file
         # Within the template all we need to do then is {{ type form.as_p }} & {{}} sub_form.as_p }}
         return render(request, 'catalog/animalcreate.html', context={
             'form': form,
-            'sub_form': sub_form,
             })
 
 # View for updating the Animal Model
 @login_required
-def animalinstanceadoptview(request, name, pk):
+def animalinstanceadoptview(request, pk):
+    url_name = resolve(request.path).url_name
     if request.method == 'POST':
-        form = forms.AnimalInstanceAdoptForm(request.POST, prefix="ani")
-        sub_form = forms.NewCartakerAdoptForm(request.POST, prefix="care")
-        if form.is_valid() and sub_form.is_valid:
-            animal = form.save(commit=False)
-            animal.caretaker = sub_form.save()
-            animal.save()
+        form = forms.AnimalInstanceAdoptForm(request.POST, prefix="ani", instance = get_object_or_404(AnimalInstance, id=pk))
+        if form.is_valid():
+            form.save()
             return HttpResponseRedirect(reverse('home_page'))
         else:
-            return render(request, 'catalog/adopt_animal.html', context = {'form':form,'sub_form':sub_form})
+            context = {
+                'form':form,
+            }
+            if 'adopt_existing' in url_name:
+                return render(request, 'catalog/adopted_animal_update', context)
+            else:
+                return render(request, 'catalog/adopt_animal.html', context)
     else:
-        form = forms.AnimalInstanceAdoptForm(instance=get_object_or_404(AnimalInstance, id=pk), prefix="ani")
-        sub_form = forms.NewCartakerAdoptForm(instance=get_object_or_404(AnimalInstance, id=pk), prefix="care")
+        date = datetime.today().date()
+        initial = {
+            'leaving_date': date,
+        }
+        form = forms.AnimalInstanceAdoptForm(instance=get_object_or_404(AnimalInstance, id=pk), prefix="ani", initial=initial)
         context = {
             'form':form,
-            'sub_form':sub_form,
         }
-        return render(request, 'catalog/adopt_animal.html', context)
+        # Get the url which is being passed to the view, and then decide which template to use
+        #This means we can still use the same view logic without repeating ourself
+        if 'adopt_existing' in url_name:
+            return render(request, 'catalog/adopted_animal_update.html', context)
+        else:
+            return render(request, 'catalog/adopt_animal.html', context)
 
-
-class AnimalTypeUpdateView(LoginRequiredMixin, UpdateView):
-    model = Animal
-    fields = '__all__'
-
-# View for updating the AnimalInstance Model
 
 class AnimalInstanceUpdateView(LoginRequiredMixin, UpdateView):
     model = AnimalInstance
-    fields = '__all__'
+    fields = [
+            'name',
+            'cross',
+            'bio',
+            'status',
+            'arrival_date',
+            'gender',
+            'hair_type',
+            'hair_length',
+            'cage',
+            'food_type',
+            'portion_size',
+            'daily_portions',
+            'allergies',
+        ]
     template_name = 'catalog/animal_instance_update.html'
 
+class AdoptedAnimalUpdate(LoginRequiredMixin, UpdateView):
+    queryset = AnimalInstance.objects.all()
+
+    def get_context_data(self, **kwargs):
+        _id = self.kwargs.get('id')
+        context = super(AdoptedAnimalUpdate, self).get_context_data(**kwargs)
+        context['second_model'] = SecondModel.objects.get(id=pk) #whatever you would like
+        return context
 
 class CageUpdateView(LoginRequiredMixin, UpdateView):
     model = Building
     fields = '__all__'
     template_name = 'catalog/cage_update.html'
+    success_url = reverse_lazy('cage_detail')
 
 
 class AnimalInstanceDeleteView(LoginRequiredMixin, DeleteView):
@@ -151,7 +166,6 @@ class CageDeleteView(LoginRequiredMixin, DeleteView):
 
 @login_required
 def cagecreateview(request):
-    form = forms.BuildingCreateForm()
     if request.method == 'POST':
         form = forms.BuildingCreateForm(data=request.POST)
         if form.is_valid():
@@ -168,7 +182,8 @@ def cagecreateview(request):
 
 @login_required
 def cagedetailview(request):
-    occupied_cages = AnimalInstance.objects.all().filter(status__exact='a').filter(cage__isnull=False)
+# use Q to do a negative filter. Q and | can also be used for 'or' queries e.g. .filter(Q(status__exact='a') | Q(status__exact='d'))
+    occupied_cages = AnimalInstance.objects.all().filter(~Q(status__exact='d')).filter(cage__isnull=False)
     # Check if the cage stated is already occupied.
     # get the cage from the form and then see if it exists in the below queryset -
     # https://stackoverflow.com/questions/6554481/how-to-see-if-a-value-or-object-is-in-a-queryset-field
@@ -191,3 +206,77 @@ def adopted_animals_view(request):
         'count_adopted': count_adopted,
         }
     return render(request, 'catalog/adopted_animals.html', context=context_dict)
+
+@login_required
+def allergycreateview(request):
+    if request.method == 'POST':
+        form = forms.AllergiesCreateForm(data=request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('allergy_list'))
+        else:
+            return render(request, reverse('allergy_create'), context = {'form':form})
+    else:
+        form = forms.AllergiesCreateForm()
+        context = {
+            'form':form,
+        }
+        return render(request, 'catalog/allergy_create.html', context)
+
+@login_required
+def allergylistview(request):
+# use Q to do a negative filter. Q and | can also be used for 'or' queries e.g. .filter(Q(status__exact='a') | Q(status__exact='d'))
+    allergies = Allergies.objects.all()
+    # Check if the cage stated is already occupied.
+    # get the cage from the form and then see if it exists in the below queryset -
+    # https://stackoverflow.com/questions/6554481/how-to-see-if-a-value-or-object-is-in-a-queryset-field
+    #Building.objects.filter(animalanstance__status='a')
+    context = {
+        'allergies': allergies,
+    }
+    return render(request, 'catalog/allergies_list.html', context)
+
+class AllergyDeleteView(LoginRequiredMixin, DeleteView):
+    model = Allergies
+    context_object_name = 'allergy'
+    # When deleted, it will go back to the page you specify in success_url
+    success_url = reverse_lazy('allergy_list')
+    template_name = 'catalog/allergy_delete.html'
+
+
+
+@login_required
+def medicationcreateview(request):
+    if request.method == 'POST':
+        form = forms.MedicationCreateForm(data=request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('medication_list'))
+        else:
+            return render(request, reverse('medication_create'), context = {'form':form})
+    else:
+        form = forms.MedicationCreateForm()
+        context = {
+            'form':form,
+        }
+        return render(request, 'catalog/allergy_create.html', context)
+
+@login_required
+def medicationlistview(request):
+# use Q to do a negative filter. Q and | can also be used for 'or' queries e.g. .filter(Q(status__exact='a') | Q(status__exact='d'))
+    medication = Medication.objects.all()
+    # Check if the cage stated is already occupied.
+    # get the cage from the form and then see if it exists in the below queryset -
+    # https://stackoverflow.com/questions/6554481/how-to-see-if-a-value-or-object-is-in-a-queryset-field
+    #Building.objects.filter(animalanstance__status='a')
+    context = {
+        'medication': medication,
+    }
+    return render(request, 'catalog/medication_list.html', context)
+
+class MedicationDeleteView(LoginRequiredMixin, DeleteView):
+    model = Medication
+    context_object_name = 'medication'
+    # When deleted, it will go back to the page you specify in success_url
+    success_url = reverse_lazy('medication_list')
+    template_name = 'catalog/medication_delete.html'

@@ -1,0 +1,19 @@
+{% extends "catalog/base.html" %} {% block title %}
+<title>Add a new Drug</title> {% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a href="{% url 'home_page' %}">Dashboard</a></li>
+        <li class="breadcrumb-item "><a href="{% url 'medication_list' %}">Medication List</a></li>
+        <li class="breadcrumb-item active" aria-current="page" aria-label="breadcrumb">Create Drug</li>
+    </ol>
+  </nav>
+
+<h2>New Medication</h2>
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <input type="submit" value="Add">
+</form>
+{% endblock %}

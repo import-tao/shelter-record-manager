@@ -1,0 +1,25 @@
+{% extends "catalog/base.html" %}
+{% block title %}<title>Allergies</title> {% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item "><a href="{% url 'home_page' %}">Dashboard</a></li>
+            <li class="breadcrumb-item active" aria-current="page" aria-label="breadcrumb">Allergies</li>
+        </ol>
+      </nav>
+<!--animal_instance is being used as this has been specified within the views as the context object name-->
+
+{% if allergies %}
+{% for allergy in allergies %}
+<ul>
+    <li>{{ allergy.allergy }}, <a href="{{ allergy.get_delete_url }}">Delete?</a></li>
+</ul>
+
+{% endfor %}
+<p>Add a new allergy <a href="{% url 'allergy_create'%}">here</a>.</p>
+{% else %}
+<p>There are currently no allergies. Please add one by clicking <a href="{% url 'allergy_create' %}">here</a>.</p>
+{% endif %}
+
+
+{% endblock %}
