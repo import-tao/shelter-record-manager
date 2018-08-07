@@ -1,50 +1,61 @@
 from django import forms, forms
 from django.core.exceptions import NON_FIELD_ERRORS
-from catalog.models import Animal, AnimalInstance, Building, Colour, Shelter_Location, Caretakers, Medication, Allergies
+from catalog.models import AnimalInstance, Building, Shelter_Location,Medication, Allergies
+from datetime import datetime
 
-class AnimalCreateForm(forms.ModelForm):
-    class Meta:
-        model = Animal
-        fields = [
-            'animal_species',
-            'breed',
-        ]
 
 
 class AnimalInstanceCreateForm(forms.ModelForm):
     class Meta:
         model = AnimalInstance
         exclude = (
-            'species',
             'cross',
             'leaving_date',
-            'caretaker',
-            'diet',
+            'adopter_first_name',
+            'adopter_last_name',
+            'adopter_email',
+            'adopter_contactnumber1',
+            'adopter_contactnumber2',
+            'food_type',
+            'portion_size',
+            'daily_portions',
+            'allergies',
+            'medication',
+            'medication_date_start',
+            'medication_date_finish',
+            'medication_weekly_dose',
+            'medication_daily_dose',
         )
 
 class AnimalInstanceAdoptForm(forms.ModelForm):
     class Meta:
         model = AnimalInstance
         fields = [
-            'status',
             'leaving_date',
-            'cage',
+            'status',
+            'adopter_first_name',
+            'adopter_last_name',
+            'adopter_email',
+            'adopter_contactnumber1',
+            'adopter_contactnumber2',
         ]
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        if cleaned_data['status'] != 'd':
+            raise forms.ValidationError(
+                'Please change the status to adopted.'
+            )
+        return cleaned_data
 
-class NewCartakerAdoptForm(forms.ModelForm):
+class AdopterDetailsForm(forms.ModelForm):
     class Meta:
-        model = Caretakers
-        fields = '__all__'
-        exclude = [
-            'date_from',
-            'date_to',
-        ]
-
-class ColourCreateForm(forms.ModelForm):
-    class Meta:
-        model = Colour
+        model = AnimalInstance
         fields = [
-            'colorfield',
+            'adopter_first_name',
+            'adopter_last_name',
+            'adopter_email',
+            'adopter_contactnumber1',
+            'adopter_contactnumber2',
         ]
 
 class BuildingCreateForm(forms.ModelForm):
@@ -71,29 +82,20 @@ class ShelterLocationCreateForm(forms.ModelForm):
             'rooms',
         ]
 
-class CaretakersCreateForm(forms.ModelForm):
-    class Meta:
-        model = Caretakers
-        fields = [
-            'first_name',
-            'last_name',
-            'email',
-            'contactnumber1',
-            'contactnumber2',
-        ]
-
 class MedicationCreateForm(forms.ModelForm):
     class Meta:
         model = Medication
-        exclude = [
-            'aniinst1',
+        fields = [
+            'name',
+            'type1',
 
         ]
 
 class AllergiesCreateForm(forms.ModelForm):
     class Meta:
         model = Allergies
-        exclude = [
-            'aniinst1',
+        fields = [
+            'allergy',
         ]
+        success_url = ''
 

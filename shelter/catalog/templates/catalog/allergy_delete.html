@@ -1,0 +1,32 @@
+{% extends 'catalog/base.html' %}
+
+{% block title %}
+<title>Delete {{ allergy }}</title>
+{% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a href="{% url 'home_page' %}">Dashboard</a></li>
+        <li class="breadcrumb-item "><a href="{% url 'allergy_list' %}">Allergy List</a></li>
+        <li class="breadcrumb-item active" aria-current="page" aria-label="breadcrumb">Allergy Delete</li>
+    </ol>
+  </nav>
+<h1> Remove Allergy </h1>
+
+<p>Are you sure you want to delete the allergy: <strong>{{ allergy }}</strong>?</p>
+
+<div class="row justify-content-start">
+    <div class="col-1">
+<form action="" method="POST">
+  {% csrf_token %}
+  <input type="submit" action="" value="Yes, Delete" />
+</form>
+</div>
+<div class="col-1">
+<form action="{% url 'allergy_list' %}" method="GET">
+    {% csrf_token %}
+    <input type="submit" action="" value="Go Back" />
+  </form>
+</div>
+</div>
+{% endblock %}

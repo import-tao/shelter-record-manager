@@ -6,7 +6,6 @@
             <li class="breadcrumb-item active" aria-current="page" aria-label="breadcrumb">New Animal</li>
         </ol>
       </nav>
-<h1>This is the test.html</h1>
 
 <form action="" method="post">
     {% csrf_token %}
@@ -14,9 +13,6 @@
     <h2>First Form</h2>
 
     {{ form.as_p }}
-
-    <h2>Second Form</h2>
-
     {{ sub_form.as_p }}
 
     <input type="submit" value="Save">

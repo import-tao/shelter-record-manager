@@ -6,10 +6,6 @@ from .models import AnimalInstance, Animal, Building
 
 class PageResponse(TestCase):
     def setUP(self):
-        ani = Animal.objects.create(
-            animal_species = 'Dog',
-            breed = 'Labrador',
-        )
         build = Building.objects.create(
            room = 'Main',
            cage = 1,
@@ -19,7 +15,6 @@ class PageResponse(TestCase):
             status = 'a',
             arrival_date = datetime.now().date(),
             gender = 'm',
-            species = ani,
             cage = build,
 
         )

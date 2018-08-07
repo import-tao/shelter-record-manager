@@ -1,0 +1,25 @@
+{% extends "catalog/base.html" %}
+{% block title %}<title>Medication</title> {% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item "><a href="{% url 'home_page' %}">Dashboard</a></li>
+            <li class="breadcrumb-item active" aria-current="page" aria-label="breadcrumb">Medication</li>
+        </ol>
+      </nav>
+<!--animal_instance is being used as this has been specified within the views as the context object name-->
+
+{% if medication %}
+{% for drug in medication %}
+<ul>
+    <li>{{ drug.name }}, {{ drug.get_type1_display }} <a href="{{ drug.get_delete_url }}">Delete?</a></li>
+</ul>
+
+{% endfor %}
+<p>Add a new drug <a href="{% url 'medication_create'%}">here</a>.</p>
+{% else %}
+<p>There is currently no medication. Please add one by clicking <a href="{% url 'medication_create' %}">here</a>.</p>
+{% endif %}
+
+
+{% endblock %}
