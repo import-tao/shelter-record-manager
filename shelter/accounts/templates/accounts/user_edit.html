@@ -1,0 +1,12 @@
+{% extends 'index/base.html' %}
+{% block title %}
+<title>Edit Profile</title>
+{% endblock %}
+
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit">Save changes</button>
+  </form>
+  {% endblock %}

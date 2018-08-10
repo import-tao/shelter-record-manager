@@ -86,7 +86,7 @@
             {{ user.username }}
           </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="{% url 'user_profile' pk=user.pk%}">My Profile</a>
+          <a class="dropdown-item" href="{% url 'user_profile'%}">My Profile</a>
           <a class="dropdown-item" href="{% url 'password_update' %}">Change Password</a>
           <div class="dropdown-divider"></div>
           <a class="nav-link" href="{% url 'logout' %}">  Logout</a>
@@ -100,7 +100,7 @@
       </li>
     </div>
   </nav>
-  <div class='container-fluid'>
+  <div class='container'>
     {% block content %} {% endblock %}
   </div>
   <footer>
