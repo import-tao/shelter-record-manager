@@ -1,4 +1,6 @@
-{% extends "catalog/base.html" %} {% block title %}
+{% extends "catalog/base.html" %} 
+{% load crispy_forms_tags %}
+{% block title %}
 <title>Add a new Animal!</title> {% endblock %} {% block content %}
 <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -7,14 +9,16 @@
         </ol>
       </nav>
 
+<div class="row justify-content-md-center">
 <form action="" method="post">
     {% csrf_token %}
 
     <h2>First Form</h2>
 
-    {{ form.as_p }}
-    {{ sub_form.as_p }}
+    {{ form| crispy }}
+    {{ sub_form| crispy }}
 
-    <input type="submit" value="Save">
+    <input type="submit" class='btn btn-success' value="Save">
 </form>
+</div>
 {% endblock %}

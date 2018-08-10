@@ -16,17 +16,14 @@
 <p>Are you sure you want to delete the allergy: <strong>{{ allergy }}</strong>?</p>
 
 <div class="row justify-content-start">
-    <div class="col-1">
 <form action="" method="POST">
   {% csrf_token %}
-  <input type="submit" action="" value="Yes, Delete" />
+  <input type="submit" action="" class='btn btn-danger' value="Yes, Delete" />
 </form>
-</div>
-<div class="col-1">
+
 <form action="{% url 'allergy_list' %}" method="GET">
     {% csrf_token %}
-    <input type="submit" action="" value="Go Back" />
+    <input type="submit" action="" class='btn btn-primary' value="Go Back" />
   </form>
-</div>
 </div>
 {% endblock %}

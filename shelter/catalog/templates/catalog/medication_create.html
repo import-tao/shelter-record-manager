@@ -1,4 +1,6 @@
-{% extends "catalog/base.html" %} {% block title %}
+{% extends "catalog/base.html" %} 
+{% load crispy_forms_tags %}
+{% block title %}
 <title>Add a new Drug</title> {% endblock %}
 {% block content %}
 <nav aria-label="breadcrumb">
@@ -10,10 +12,12 @@
   </nav>
 
 <h2>New Medication</h2>
+<div class="row justify-content-md-center">
 <form action="" method="post">
     {% csrf_token %}
-    {{ form.as_p }}
+    {{ form| crispy }}
 
-    <input type="submit" value="Add">
+    <input type="submit" class='btn btn-success' value="Add">
 </form>
+</div>
 {% endblock %}

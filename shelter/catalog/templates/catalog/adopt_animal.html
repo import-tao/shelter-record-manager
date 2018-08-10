@@ -1,4 +1,5 @@
 {% extends 'catalog/base.html' %}
+{% load crispy_forms_tags %}
 
 {% block title %}
 <title>Adopt an animal</title> {% endblock %} {% block content %}
@@ -9,15 +10,17 @@
         </ol>
       </nav>
 
+<div class="row justify-content-md-center">
 <form action="" method="post">
     {% csrf_token %}
 
-    {{ form.as_p }}
+    {{ form| crispy }}
 
 <h2>Adopter Details</h2>
 
-    {{ sub_form.as_p }}
+    {{ sub_form| crispy }}
 
     <input type="submit" value="Adopt!">
 </form>
+</div>
 {% endblock %}

@@ -1,4 +1,5 @@
 {% extends 'catalog/base.html' %}
+{% load crispy_forms_tags %}
 {% block content %}
 <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -6,14 +7,15 @@
             <li class="breadcrumb-item active" aria-current="page" aria-label="breadcrumb">Animal Update</li>
         </ol>
       </nav>
+<div class="row justify-content-md-center">
 <form action="" method="post">
     {% csrf_token %}
     <table>
-    {{ form.as_table }}
+    {{ form| crispy }}
     </table>
-    <input type="submit" value="Save" />
+    <input type="submit" class= 'btn btn-success' value="Update" />
 
 </form>
-
+</div>
 
 {% endblock %}

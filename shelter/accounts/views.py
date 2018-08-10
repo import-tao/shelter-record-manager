@@ -19,10 +19,8 @@ def signup(request):
             auth_login(request, user)
             return redirect('index')
     else:
-        if User.is_authenticated:
-            return render(request, 'index/index.html')
         form = SignUpForm()
-    return render(request, 'registration/signup.html', {'form': form})
+        return render(request, 'registration/signup.html', {'form': form})
 
 @login_required
 def change_password(request):

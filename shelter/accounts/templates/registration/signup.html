@@ -1,16 +1,19 @@
 {% extends 'index/base.html' %}
+{% load crispy_forms_tags %}
 
 {% block content %}
 {% if user.is_authenticated %}
 <p>You are already signed up, please go to a different page.</p>
 {% else %}
-  <div class="container">
+<div class="row">
+  <div class="col-md-6">
     <h2>Sign up</h2>
     <form method="post" novalidate>
       {% csrf_token %}
-      {{ form.as_p }}
+      {{ form| crispy }}
       <button type="submit" class="btn btn-primary">Create an account</button>
     </form>
   </div>
+</div>
 {% endif %}
 {% endblock %}
