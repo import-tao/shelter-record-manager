@@ -17,6 +17,16 @@ class SignUpForm(UserCreationForm):
             'password1',
             'password2',
         )
+    
+    # Control who signs up by checking their email. Add in a new elseif for permitted people
+    # This is only practical for small number of people.
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if not 'smith@gmail.com' in email:
+            raise forms.ValidationError(
+                'You are not permitted to sign up. Please contact us using the Contact Us page.'
+                )
+        return email
 
 class CustomEditProfileForm(UserChangeForm):
 

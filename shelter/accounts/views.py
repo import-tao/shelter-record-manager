@@ -7,7 +7,8 @@ from django.contrib.auth import login as auth_login, update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm, UserChangeForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-
+from django.views.generic import UpdateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
 def signup(request):
@@ -18,6 +19,8 @@ def signup(request):
             user = form.save()
             auth_login(request, user)
             return redirect('index')
+        else:
+            return render(request, 'registration/signup.html', {'form': form})
     else:
         form = SignUpForm()
         return render(request, 'registration/signup.html', {'form': form})
