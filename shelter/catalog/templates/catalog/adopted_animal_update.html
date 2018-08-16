@@ -1,5 +1,5 @@
 {% extends 'catalog/base.html' %}
-
+{% load crispy_forms_tags %}
 {% block title %}
 <title>Adopt an animal</title> {% endblock %} {% block content %}
 <nav aria-label="breadcrumb">
@@ -16,7 +16,7 @@
 
     <h2>First Form</h2>
 
-    {{ form.as_p }}
+    {{ form| crispy }}
 
     <input type="submit" value="Update">
 </form>

@@ -1,7 +1,7 @@
 {% extends 'catalog/base.html' %}
 
 {% block title %}
-<title>Delete {{ medication }}</title>
+<title>Delete {{ medication.name }} ({{ medication.get_type1_display }})</title>
 {% endblock %}
 {% block content %}
 <nav aria-label="breadcrumb">
@@ -13,19 +13,19 @@
   </nav>
 <h1> Remove Medication </h1>
 
-<p>Are you sure you want to delete the medication: <strong>{{ medication }}</strong>?</p>
+<p>Are you sure you want to delete the medication: <strong>{{ medication.name }} ({{ medication.get_type1_display }})</strong>?</p>
 
 <div class="row justify-content-start">
     <div class="col-1">
 <form action="" method="POST">
   {% csrf_token %}
-  <input type="submit" action="" value="Yes, Delete" />
+  <input type="submit" action="" class='btn btn-danger' value="Yes, Delete" />
 </form>
 </div>
 <div class="col-1">
 <form action="{% url 'medication_list' %}" method="GET">
     {% csrf_token %}
-    <input type="submit" action="" value="Go Back" />
+    <input type="submit" action="" class='btn btn-primary' value="Go Back" />
   </form>
 </div>
 </div>

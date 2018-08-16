@@ -1,4 +1,5 @@
-{% extends "catalog/base.html" %} {% block title %}
+{% extends "catalog/base.html" %}
+{% load crispy_forms_tags %} {% block title %}
 <title>Add a new building info!</title> {% endblock %}
 {% block content %}
 <nav aria-label="breadcrumb">
@@ -8,18 +9,21 @@
     </ol>
   </nav>
 
-<h1>This is the test.html</h1>
+
 {% if error %}
 <div class="alert alert-danger" role="alert" >
 {{ error }}
 </div>
 {% endif %}
-
+<div class="row justify-content-md-center">
 <h2>New Cage</h2>
+</div>
+<div class="row justify-content-md-center">
 <form action="." method="post">
     {% csrf_token %}
-    {{ form.as_p }}
+    {{ form| crispy }}
 
-    <input type="submit" value="Save">
+    <input type="submit" class='btn btn-success' value="Create">
 </form>
+</div>
 {% endblock %}

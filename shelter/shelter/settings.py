@@ -38,12 +38,14 @@ TIME_FORMAT = 'H:i'
 
 INSTALLED_APPS = [
     'catalog.apps.CatalogConfig',
+    'accounts.apps.AccountsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -126,6 +128,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATICFIELDS_DIR = [
+    os.path.join(BASE_DIR, 'static')
+]
+
 #Gmail Settings
 EMAIL_HOST = Config.EMAIL_HOST
 EMAIL_HOST_USER = Config.EMAIL_HOST_USER
@@ -139,3 +145,5 @@ ADMINS = Config.ADMINS
 MANAGERS = ADMINS
 
 LOGOUT_REDIRECT_URL = 'index'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

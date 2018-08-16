@@ -259,7 +259,7 @@ def medicationcreateview(request):
         context = {
             'form':form,
         }
-        return render(request, 'catalog/allergy_create.html', context)
+        return render(request, 'catalog/medication_create.html', context)
 
 @login_required
 def medicationlistview(request):
