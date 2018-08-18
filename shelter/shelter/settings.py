@@ -21,13 +21,19 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-
-SECRET_KEY = Config.SECRET_KEY
+SECRET_KEY = Config.SECRET_KEY or os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# Changed so it will be False if the DJANGO_DEBUG environment variable is an empty string otherwise True
+DEBUG = bool(os.environ.get('DJANGO_DEBUG', True))
 
 ALLOWED_HOSTS = []
+
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'
 
 DATE_INPUT_FORMATS = 'd/m/Y'
 DATE_FORMAT = 'D N Y'
@@ -133,12 +139,12 @@ STATICFIELDS_DIR = [
 ]
 
 #Gmail Settings
-EMAIL_HOST = Config.EMAIL_HOST
-EMAIL_HOST_USER = Config.EMAIL_HOST_USER
-EMAIL_HOST_PASSWORD = Config.EMAIL_HOST_PASSWORD
-EMAIL_PORT = Config.EMAIL_PORT
+EMAIL_HOST = Config.EMAIL_HOST or os.environ.get('EMAIL_HOST')
+EMAIL_HOST_USER = Config.EMAIL_HOST_USER or os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = Config.EMAIL_HOST_PASSWORD or os.environ.get("EMAIL_HOST_PASSWORD")
+EMAIL_PORT = int(Config.EMAIL_PORT or os.environ.get("EMAIL_PORT"))
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = Config.DEFAULT_FROM_EMAIL
+DEFAULT_FROM_EMAIL = Config.DEFAULT_FROM_EMAIL or os.environ.get('DEFAULT_FROM_EMAIL')
 
 # Settings to receive server errors to email
 ADMINS = Config.ADMINS

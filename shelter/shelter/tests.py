@@ -8,19 +8,19 @@ class PageResponse(TestCase):
     def test_main_home_view_status_code(self):
         url = reverse('index')
         response = self.client.get(url)
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
 
     def test_main_about_view_status_code(self):
         url = reverse('about')
         response = self.client.get(url)
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
 
     def test_main_contact_view_status_code(self):
         url = reverse('contactus')
         response = self.client.get(url)
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
         
     def test_main_features_view_status_code(self):
         url = reverse('features')
         response = self.client.get(url)
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)

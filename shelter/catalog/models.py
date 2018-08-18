@@ -82,7 +82,7 @@ class AnimalInstance(models.Model):
     medication_daily_dose = models.IntegerField('Daily Dose', help_text = 'How many times per day.', blank=True, null=True)
 
     def __str__(self):
-        return '{0}, {1}'.format(self.name, self.species)
+        return '{0}, {1}'.format(self.name, self.animal_species)
 
     # get_absolute_url will create an automatic url hyperlink for this class and in the admin site, it will have an option 'VIEW ON SITE' which will go direct to it
     # this is also useful when writing navigation within the front end to easily hyperlink to an Animal.
