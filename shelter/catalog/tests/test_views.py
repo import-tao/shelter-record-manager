@@ -31,7 +31,7 @@ class PageResponse(TestCase):
         url = reverse('home_page')
         response = self.client.get(url, follow=True)
         self.assertEqual(response.status_code, 200)
-
+               
     def test_app_animal_adopted_animals_view_status_code(self):
         url = reverse('adopted_animals')
         response = self.client.get(url, follow=True)
@@ -116,5 +116,4 @@ class PageResponse(TestCase):
         url = reverse('medication_delete', kwargs = {'pk':1})
         response = self.client.get(url, follow=True)
         self.assertEqual(response.status_code, 200)
-
 

@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 # Create your models here.
-
+'''
 class User(AbstractBaseUser):
     email = models.EmailField(max_length= 255, unique=True, verbose_name='email address')
     first_name = models.CharField(max_length= 255)
@@ -31,4 +31,4 @@ class User(AbstractBaseUser):
     def last_login(self):
         return self.last_login
 
-    
+    '''
