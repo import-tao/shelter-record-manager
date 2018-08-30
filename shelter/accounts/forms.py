@@ -2,6 +2,12 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.models import User
 
+approved_emails= [
+    'smith@gmail.com',
+]
+
+
+
 class SignUpForm(UserCreationForm):
     email = forms.EmailField(max_length=254, required=True, widget=forms.EmailInput())
     first_name = forms.CharField(required=True)
@@ -22,7 +28,7 @@ class SignUpForm(UserCreationForm):
     # This is only practical for small number of people.
     def clean_email(self):
         email = self.cleaned_data.get('email')
-        if not 'smith@gmail.com' in email:
+        if not email in approved_emails:
             raise forms.ValidationError(
                 'You are not permitted to sign up. Please contact us using the Contact Us page.'
                 )

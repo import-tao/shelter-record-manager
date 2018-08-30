@@ -11,10 +11,11 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
-from secret_environment_keys import Config
+from .secret_environment_keys import Config
+from django.contrib.messages import constants as messages
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 # Quick-start development settings - unsuitable for production
@@ -78,7 +79,6 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'shelter.wsgi.application'
 
 
 # Database
@@ -127,12 +127,14 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 STATIC_URL = '/static/'
 
 STATICFIELDS_DIR = [
     os.path.join(BASE_DIR, 'static')
 ]
+
 
 #Gmail Settings
 EMAIL_HOST = Config.EMAIL_HOST
@@ -149,3 +151,11 @@ MANAGERS = ADMINS
 LOGOUT_REDIRECT_URL = 'index'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+MESSAGE_TAGS = {
+    messages.DEBUG: 'alert-info',
+    messages.INFO: 'alert-info',
+    messages.SUCCESS: 'alert-success',
+    messages.WARNING: 'alert-warning',
+    messages.ERROR: 'alert-danger',
+}
