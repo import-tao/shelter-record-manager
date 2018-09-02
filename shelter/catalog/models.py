@@ -47,6 +47,8 @@ class AnimalInstance(models.Model):
         ('h','Hard'),
         ('s','Soft'),
     )
+    date_added = models.DateTimeField(auto_now_add=True)
+    date_modified= models.DateTimeField(auto_now=True)
     animal_species = models.CharField(max_length= 30, null= False, blank= True, help_text= 'What species of animal.')
     breed = models.CharField(max_length= 40, help_text= 'What breed of animal it is.', blank=True)
     name = models.CharField(max_length= 30, null= False, blank= False, help_text= 'The name of the animal.')
@@ -58,7 +60,7 @@ class AnimalInstance(models.Model):
                                                          This may include distinctive markings, \
                                                         additional behaviour or care comments.')
     status= models.CharField(max_length= 1, choices=ADOPTION_STATUS, help_text='Select the best fit status for the animal.')
-    arrival_date= models.DateTimeField(null=False, blank=False, help_text= 'Date animal started at the shelter.', default=timezone.now)
+    arrival_date= models.DateTimeField(null=False, blank=False, help_text= 'Date animal started at the shelter.', default=timezone.now())
     leaving_date = models.DateTimeField(null=True, blank=True, help_text= 'Date animal left the shelter.')
     gender= models.CharField(max_length= 6, blank= False, choices= GENDER_CHOICES, default='f')
     hair_type = models.CharField(max_length= 1, choices = HAIR_TYPE_CHOICES, help_text= 'Please select the type of hair it has.', blank= True)
@@ -109,6 +111,8 @@ class AnimalInstance(models.Model):
         return reverse('adopt_existing', args=[str(self.id)])
 
 class Building(models.Model):
+    date_added = models.DateTimeField(auto_now_add=True)
+    date_modified= models.DateTimeField(auto_now=True)
     room= models.CharField(max_length= 20, blank= False)
     cage= models.CharField(max_length= 10, blank= False)
 
@@ -160,6 +164,8 @@ class Medication(models.Model):
         ('c', 'Cream'),
         ('d', 'Drops'),
     )
+    date_added = models.DateTimeField(auto_now_add=True)
+    date_modified= models.DateTimeField(auto_now=True)
     name = models.CharField('Medication', max_length= 50)
     type1 = models.CharField('Type', max_length= 1, choices=TYPE_CHOICES)
 
@@ -171,6 +177,8 @@ class Medication(models.Model):
         return reverse("medication_delete", args=[str(self.id)])
 
 class Allergies(models.Model):
+    date_added = models.DateTimeField(auto_now_add=True)
+    date_modified= models.DateTimeField(auto_now=True)
     allergy = models.CharField(max_length= 35, blank=True, null=True)
     def __str__(self):
         return self.allergy

@@ -9,23 +9,21 @@ The base.html templates will be pulled through to the other templates.
 
 ### Backend
 
-- Expand url routing
-- Create views - Partly done
 - Build testing
 - Create Rest API
-- Allow import/export of data
 - Improve user registration so can determine who can create an account
 - Possibly look at introducing a subdomain depending on shelter.
   - if doing this possibly tailor users to specific domains etc.
-- Maintain animal type, colour and species = Should we split the Animal model so it only contains Species as char field. Breed is char field in its own model and
- colour remains in its own model but gets linked straight into AnimalInstance mode
+
 ### Frontend
 
-- Complete design of base.html files needed (possibly use bootstrap or CSS grid)
-- Creation of different pages
+- Improve usability with Ajax
+- Improve usability with JS
 
 ### Done
 
+- Expand url routing
+- Create views - Partly done
 - Set up email
 - Use environment variables for sensitive info
 - Create Models
@@ -33,3 +31,8 @@ The base.html templates will be pulled through to the other templates.
 - Maintain animal (in part), see above about maintaining animal type, colour and species
 - Delete animal
 - List of all available animals
+- Maintain animal type, colour and species = Should we split the Animal model so it only contains Species as char field. Breed is char field in its own model and
+ colour remains in its own model but gets linked straight into AnimalInstance mode
+- Complete design of base.html files needed (possibly use bootstrap or CSS grid)
+- Allow import/export of data
+- Creation of different pages

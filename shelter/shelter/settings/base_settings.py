@@ -38,8 +38,9 @@ TIME_FORMAT = 'H:i'
 # Application definition
 
 INSTALLED_APPS = [
-    'catalog.apps.CatalogConfig',
-    'accounts.apps.AccountsConfig',
+    'catalog',
+    'accounts',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

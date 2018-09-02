@@ -26,7 +26,7 @@ If you are using any version of Python older than 3.4 (and that includes the 2.7
 
 All of the settings are stored within a file named "secret_environment_keys.py" which is imported into "settings.py". You will see at the top of settings.py it imports Config.
 
-Within the shelter folder add in the following code to a file called "secret_environment_keys.py":
+Within the settings folder (shelter>settings) add in the following code to a file called "secret_environment_keys.py":
 
 ``` python
 import os
@@ -54,10 +54,13 @@ Your shelter folder should now look like this:
 +---shelter
 |       +--catalog
 |       +--shelter
+|           +--settings
+|               |...
+|               |secret_environment_keys.py
 |       +--templates
 |       .gitignote
 |       manage.py
-|       secret_environment_keys.py
+
 +---README.md
 +---requirments.txt
 +---UI-notes.txt
@@ -108,7 +111,7 @@ pip install -r requirements.txt
 
 This will read the requirements.txt file and automatically install everything within it
 
-### Step 4 - Run a Local Server
+### Step 4 - Run a Local Server and Settings
 
 We should by now have:  
 [x] Created our config file  
@@ -122,15 +125,22 @@ Using the cmd line, go to the folder with "manage.py" in it (the same one as req
 python manage.py runserver
 ```
 
+If this doesn't work and returns a secret key error, you will need to define the filepath to the settings file by doing:
+
+``` shell
+python manage.py runserver --settings=shelter.settings.local_settings
+```
+
+
 This will then run the Django project and it will state which port it is listening out on which is usually [http://127.0.0.1:8000/](http://127.0.0.1:8000/) (port 8000). If you want to change the port, you can specify this when you are activating the local server. So for port 5050 you would do:
 
 ``` cmd
-python manage.py runserver 5050
+python manage.py runserver 5050 --settings=shelter.settings.local_settings
 ```
 
 If it was successful, and there are no problems in the code preventing it from running (e.g. syntax error) you will see the below:
 
-``` shell
+```shell
 Performing system checks...
 
 System check identified no issues (0 silenced).
@@ -145,3 +155,49 @@ Quit the server with CONTROL-C.
 ```
 
 When you have finished with this you can press control + C to stop the local server. It is worth noting that if you make changes to the code and save it, whilst the local server is running, this will be automatically changed and you therefore do not need to stop the server and re-run it again.
+
+'local_settings' is the name of the file being used for the settings and change this if you want to use a different file (which is in the same folder).If you want to create your own settings file, this can done by creating a new .py file within the settings folder. Ensure you import all from the base_settings.py file:
+
+```python
+from .base_settings import *
+```
+
+Now you can add in the specific settings you need. Note that there is a specific file for production settings in this folder.
+
+You will likely need to make migrations too. To do this do the following:
+
+```cmd
+python manage.py makemigrations --settings=shelter.settings.local_settings
+```
+
+Potentially you may need to specify the app which requires the migrations e.g.
+
+```cmd
+python manage.py makemigrations catalog --settings=shelter.settings.local_settings
+```
+
+Or
+
+```cmd
+python manage.py makemigrations accounts --settings=shelter.settings.local_settings
+```
+
+### Step 5 (optional) - Users
+
+To create a user for the website you can use the createsuperuser command, however to use the signup pages of the website, you need to first ensure that the email is allowed. There is a model named PermittedEmails within shelter.accounts.models. This is used to control who is able to sign up on the website. When using the sign up form, there is avalidation to ensure no one can sign up with a username or email which already exists, or an email which is not permitted; this validation is done within forms.py.
+
+### Step 6 Test Coverage
+
+To test your coverage, you can use coverage (pip install coverage) and following the below commands to show the % of the code which the tests cover/touch.
+
+```cmd
+coverage run --source='.' manage.py test the-app-you-want-to-test --settings=shelter.settings.local_settings
+```
+
+This will then create a coverage file in the same directory. To view the results, you can generate an html report:
+
+```cmd
+coverage html
+```
+
+This will then create a folder called htmlcov. Find the index.html file and open it in your browser!

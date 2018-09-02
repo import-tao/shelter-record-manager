@@ -1,4 +1,4 @@
-from datetime import datetime
+from django.utils import timezone
 
 from django.urls import reverse
 from django.test import TestCase, RequestFactory
@@ -20,7 +20,7 @@ class PageRedirectstoLogin(TestCase):
         AnimalInstance.objects.create(
             name = 'Dexter',
             status = 'a',
-            arrival_date = datetime.now().date(),
+            arrival_date = timezone.now().date(),
             gender = 'm',
             cage = build,
         )
@@ -126,7 +126,7 @@ class LoggedinResponse(TestCase):
         AnimalInstance.objects.create(
             name = 'Dexter',
             status = 'a',
-            arrival_date = datetime.now().date(),
+            arrival_date = timezone.now().date(),
             gender = 'm',
             cage = build,
 

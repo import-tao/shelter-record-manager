@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse
-from datetime import datetime
+from django.utils import timezone
 from datetime import timedelta
 from catalog.models import Building, AnimalInstance, Allergies, Medication, Shelter_Location
 
@@ -17,8 +17,8 @@ class AnimalInstanceLabellTest(TestCase):
             breed = 'Labrador',
             cross = False,
             status = 'a',
-            arrival_date = datetime.now().date(),
-            leaving_date = datetime.now().date() + timedelta(weeks= 1),
+            arrival_date = timezone.now() - timedelta(weeks=-1),
+            leaving_date = timezone.now() + timedelta(weeks= 1),
             gender = 'Male',
             cage = build,
         )
@@ -98,8 +98,8 @@ class Str_Checks(TestCase):
             breed = 'Labrador',
             cross = False,
             status = 'a',
-            arrival_date = datetime.now().date(),
-            leaving_date = datetime.now().date() + timedelta(weeks= 1),
+            arrival_date = timezone.now() - timedelta(weeks=-1),
+            leaving_date = timezone.now() + timedelta(weeks= 1),
             gender = 'Male',
             cage = build,
         )
@@ -148,8 +148,8 @@ class AbsoluteUrlTests(TestCase):
             breed = 'Labrador',
             cross = False,
             status = 'a',
-            arrival_date = datetime.now().date(),
-            leaving_date = datetime.now().date() + timedelta(weeks= 1),
+            arrival_date = timezone.now() - timedelta(weeks=-1),
+            leaving_date = timezone.now() + timedelta(weeks= 1),
             gender = 'Male',
             cage = build,
         )
