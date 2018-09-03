@@ -30,13 +30,13 @@ To do:
 
 @login_required
 def homepage_view(request):
-    animal_instances_available= AnimalInstance.objects.filter(status__exact='a')
+    animal_instances_available= AnimalInstance.objects.filter(status__exact='a').order_by("name")
     count_available = animal_instances_available.count()
-    animal_instances_reserved = AnimalInstance.objects.filter(status__exact='r')
+    animal_instances_reserved = AnimalInstance.objects.filter(status__exact='r').order_by("name")
     count_reserved = animal_instances_reserved.count()
-    animal_instances_quarantine = AnimalInstance.objects.filter(status__exact='q')
+    animal_instances_quarantine = AnimalInstance.objects.filter(status__exact='q').order_by("name")
     count_quarantine = animal_instances_quarantine.count()
-    animal_instances_adopted = AnimalInstance.objects.filter(status__exact='d')
+    animal_instances_adopted = AnimalInstance.objects.filter(status__exact='d').order_by("name")
     count_adopted = animal_instances_adopted.count()
     context_dict = {
         'animal_instances_available': animal_instances_available,
@@ -199,7 +199,7 @@ def cagedetailview(request):
 
 @login_required
 def adopted_animals_view(request):
-    animal_instances_adopted = AnimalInstance.objects.filter(status__exact='d')
+    animal_instances_adopted = AnimalInstance.objects.filter(status__exact='d').order_by("name")
     count_adopted = animal_instances_adopted.count()
     context_dict = {
         'animal_instances_adopted': animal_instances_adopted,

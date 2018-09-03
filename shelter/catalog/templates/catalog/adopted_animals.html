@@ -3,22 +3,25 @@
     <div class="container">
 <h2>Adopted Animals</h2>
 {% if animal_instances_adopted %}
-{% for animal in animal_instances_adopted %}
-<div class="container ">
-    <div class="row justify-content-sm-center col-3 border-bottom border-success">
-        <div>
-            <a href="{{ animal.get_absolute_url }}"> {{ animal.name }}</a>
+<div class="row">
+        {% for animal in animal_instances_adopted %}
+        
+            <div class="col-md-4 col-sm-4">
+              <div class= "card">
+                <div class="card-body">
+                <h5 class= "card-title"> <a href="{{ animal.get_absolute_url }}" >{{ animal.name }}</a><small>, {{ animal.animal_species }}</small></h5>
+                  <p class="card-text">{{ animal.breed|truncatechars:30 }}</p>
+              <a class="btn btn-primary" href="{{animal.get_update_url }}">Update</a>
+        
+         
+              <a class="btn btn-success"href="{{ animal.get_adopt_url }}">Adopt?</a>
+        
+        
+              <a class="btn btn-danger" href="{{ animal.get_delete_url }}">Delete!?</a>
+          </div>
         </div>
-    </div>
-    <div class="row justify-content-sm-center col-4">
-        <div class="col-6">
-            <a href="{{animal.update_adopted_url }}">Update</a>
         </div>
-        <div class="col-6">
-            <a href="{{ animal.get_delete_url }}">Delete!?</a>
-        </div>
-    </div>
-</div>
-{% endfor %} {% else %}
+        {% endfor %}
+        </div> {% else %}
 <p>There are no adopted animals.</p>
 {% endif %} </div>{% endblock %}

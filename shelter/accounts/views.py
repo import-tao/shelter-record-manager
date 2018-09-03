@@ -12,7 +12,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
 def signup(request):
-    # prevents a logged in user to see sign up page
+    
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
