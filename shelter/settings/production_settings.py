@@ -13,7 +13,7 @@ def get_env_variable(var_name):
 SECRET_KEY = get_env_variable('SECRET_KEY')
 DATABASES = {'default': dj_database_url.config(default='postgres://user:pass@localhost/dbname')}
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
