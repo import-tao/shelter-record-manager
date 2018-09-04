@@ -11,19 +11,23 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
-from .secret_environment_keys import Config
+from django.core.exceptions import ImproperlyConfigured
 from django.contrib.messages import constants as messages
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
+def get_env_variable(var_name):
+    '''Get environment variable or return exception. '''
+    try:
+        return os.environ[var_name]
+    except KeyError:
+        error_msg = f'Set the {var_name} environment variable.'
+        raise ImproperlyConfigured(error_msg)
 
-# SECURITY WARNING: keep the secret key used in production secret!
 
-SECRET_KEY = Config.SECRET_KEY
+SECRET_KEY = get_env_variable(var_name)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -81,16 +85,11 @@ TEMPLATES = [
 ]
 
 
+'''
+Database
 
-# Database
-# https://docs.djangoproject.com/en/2.0/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
+'''
+# This is set within either the local settings or production settings file.
 
 
 # Password validation
@@ -125,7 +124,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-
+'''
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
@@ -135,18 +134,10 @@ STATIC_URL = '/static/'
 STATICFILES_DIR = [
     os.path.join(BASE_DIR, 'static')
 ]
-
-
-#Gmail Settings
-EMAIL_HOST = Config.EMAIL_HOST
-EMAIL_HOST_USER = Config.EMAIL_HOST_USER
-EMAIL_HOST_PASSWORD = Config.EMAIL_HOST_PASSWORD
-EMAIL_PORT = Config.EMAIL_PORT
-EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = Config.DEFAULT_FROM_EMAIL
+'''
 
 # Settings to receive server errors to email
-ADMINS = Config.ADMINS
+ADMINS = []
 MANAGERS = ADMINS
 
 LOGOUT_REDIRECT_URL = 'index'
