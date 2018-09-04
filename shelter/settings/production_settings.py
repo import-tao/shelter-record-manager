@@ -1,6 +1,6 @@
 from .base_settings import *
 import dj_database_url
-
+import django_heroku
 
 def get_env_variable(var_name):
     '''Get environment variable or return exception. '''
@@ -15,4 +15,6 @@ DATABASES = {'default': dj_database_url.config(default='postgres://user:pass@loc
 
 DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
+
+django_heroku.settings(locals())
