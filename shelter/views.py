@@ -4,7 +4,7 @@ from django.shortcuts import render, reverse, redirect
 from django.http import HttpResponseRedirect
 from django.core.mail import send_mail
 from .forms import ContactUsForm
-from ...settings.secret_environment_keys import Config
+from shelter.settings.secret_environment_keys import Config
 from django.contrib.auth.models import User
 from django.contrib.auth import login as auth_login
 from django.contrib import messages
