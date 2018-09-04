@@ -14,6 +14,8 @@ import os
 from django.core.exceptions import ImproperlyConfigured
 from django.contrib.messages import constants as messages
 
+import dj_database_url
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -89,7 +91,7 @@ TEMPLATES = [
 Database
 
 '''
-# This is set within either the local settings or production settings file.
+DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 
 
 # Password validation
