@@ -60,7 +60,7 @@ class AnimalInstance(models.Model):
                                                          This may include distinctive markings, \
                                                         additional behaviour or care comments.')
     status= models.CharField(max_length= 1, choices=ADOPTION_STATUS, help_text='Select the best fit status for the animal.')
-    arrival_date= models.DateTimeField(null=False, blank=False, help_text= 'Date animal started at the shelter.', default=timezone.now())
+    arrival_date= models.DateTimeField(null=False, blank=False, help_text= 'Date animal started at the shelter.')
     leaving_date = models.DateTimeField(null=True, blank=True, help_text= 'Date animal left the shelter.')
     gender= models.CharField(max_length= 6, blank= False, choices= GENDER_CHOICES, default='f')
     hair_type = models.CharField(max_length= 1, choices = HAIR_TYPE_CHOICES, help_text= 'Please select the type of hair it has.', blank= True)

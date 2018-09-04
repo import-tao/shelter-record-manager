@@ -14,23 +14,15 @@ import os
 from django.core.exceptions import ImproperlyConfigured
 from django.contrib.messages import constants as messages
 
-import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
-def get_env_variable(var_name):
-    '''Get environment variable or return exception. '''
-    try:
-        return os.environ[var_name]
-    except KeyError:
-        error_msg = f'Set the {var_name} environment variable.'
-        raise ImproperlyConfigured(error_msg)
 
 
-SECRET_KEY = get_env_variable('SECRET_KEY')
 
+SECRET_KEY = ''
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -91,7 +83,7 @@ TEMPLATES = [
 Database
 
 '''
-DATABASES = {'default': dj_database_url.config(default='postgres://user:pass@localhost/dbname')}
+DATABASES = {}
 
 
 # Password validation

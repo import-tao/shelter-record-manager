@@ -1,1 +1,1 @@
-web: gunicorn shelter.wsgi
+web: gunicorn shelter.wsgi:application
