@@ -4,7 +4,6 @@ from django.shortcuts import render, reverse, redirect
 from django.http import HttpResponseRedirect
 from django.core.mail import send_mail
 from .forms import ContactUsForm
-from shelter.settings.secret_environment_keys import Config
 from django.contrib.auth.models import User
 from django.contrib.auth import login as auth_login
 from django.contrib import messages
@@ -31,7 +30,7 @@ def contact(request):
                 recipients = [sender]
                 send_mail(subject,message,sender,recipients)
             subject = '***CONTACT US FORM *** ' + subject
-            recipients = os.environ['EMAIL_HOST_USER'] or [Config.EMAIL_HOST_USER]
+            recipients = os.environ['EMAIL_HOST_USER']
             message = f'PERSON: {name} \nCC SENDER: {cc_myself} \nSUBJECT: {subject}  \nMESSAGE: {message}'
             send_mail(subject, message, sender, recipients)
             messages.success(request, 'Your message was successfully sent!')
