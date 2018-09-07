@@ -30,7 +30,7 @@ def contact(request):
                 recipients = [form_email]
                 send_mail(form_subject,form_message,form_email,recipients)
             subject = '***CONTACT US FORM *** ' + form_subject
-            recipients = os.environ['ADMINS']
+            recipients = [os.environ['ADMINS']]
             message = f'PERSON: {form_name} \nCC SENDER: {form_cc_myself} \nSUBJECT: {form_subject}  \nMESSAGE: {form_message}'
             send_mail(subject, message, form_email, recipients)
             messages.success(request, 'Your message was successfully sent!')
