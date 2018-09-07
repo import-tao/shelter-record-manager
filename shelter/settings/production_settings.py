@@ -24,4 +24,5 @@ DEFAULT_FROM_EMAIL = get_env_variable('DEFAULT_FROM_EMAIL')
 
 ALLOWED_HOSTS = ["*"]
 
+ADMINS = get_env_variable('ADMINS')
 django_heroku.settings(locals())

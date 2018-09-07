@@ -6,24 +6,20 @@
 
 
 
-<div class="row justify-content-md-center">
-    <form action="{% url 'login' %}" method="post">
-
-
-        {% csrf_token %} {{ form| crispy }}
-
-
-        <input type="submit" class='btn btn-success' value="login" />
-        <input type="hidden" name="next" value="{{ next }}" />
-
-
-        <p>
-            <a href="{% url 'password_reset' %}">Lost password?</a>
-        </p>
-        <p>
-            If you want to sign up, click
-            <a href="{% url 'signup' %}">here</a>.
-        </p>
-    </form>
+<div class="row">
+    <div class="col-md-3">
+        <form action="{% url 'login' %}" method="post">
+            {% csrf_token %} {{ form| crispy }}
+            <input type="submit" class='btn btn-success' value="login" />
+            <input type="hidden" name="next" value="{{ next }}" />
+            <p>
+                <a href="{% url 'password_reset' %}">Lost password?</a>
+            </p>
+            <p>
+                If you want to sign up, click
+                <a href="{% url 'signup' %}">here</a>.
+            </p>
+        </form>
+    </div>
 </div>
 {% endif %} {% endblock %}
