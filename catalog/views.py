@@ -1,11 +1,13 @@
 from django.shortcuts import render, render_to_response, reverse, get_object_or_404
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from .models import AnimalInstance, Building, Allergies, Medication
 from django.urls import reverse_lazy, resolve
 from django.views.generic import CreateView, UpdateView, DeleteView, DetailView
 from datetime import datetime
 from django.db.models import Count, Q
+
 from . import forms
+from .resources import AnimalInstanceResource
 
 # Login imports - login required is for function based views
 # Mixin is for class based views and is passed as an argument
@@ -280,3 +282,37 @@ class MedicationDeleteView(LoginRequiredMixin, DeleteView):
     # When deleted, it will go back to the page you specify in success_url
     success_url = reverse_lazy('medication_list')
     template_name = 'catalog/medication_delete.html'
+
+
+'''
+CSV EXPORT
+'''
+def export_to_csv(queryset):
+    '''
+    Export to csv
+    '''
+    animal_resource = AnimalInstanceResource()
+    dataset = animal_resource.export(queryset)
+    response = HttpResponse(dataset.xls, content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="All_Animals.xls"'
+    return response
+
+def all_animal_export(request):
+    queryset = AnimalInstance.objects.all()
+    return export_to_csv(queryset)
+
+def all_available_export(request):
+    queryset = AnimalInstance.objects.filter(status__exact='a')
+    return export_to_csv(queryset)
+
+def all_quarantine_export(request):
+    queryset = AnimalInstance.objects.filter(status__exact='q')
+    return export_to_csv(queryset)
+
+def all_adopted_export(request):
+    queryset = AnimalInstance.objects.filter(status__exact='d')
+    return export_to_csv(queryset)
+
+def all_reserved_export(request):
+    animal_resource = AnimalInstanceResource()
+    return export_to_csv(queryset)

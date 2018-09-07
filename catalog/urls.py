@@ -21,4 +21,10 @@ urlpatterns = [
     path('medication/', views.medicationlistview, name='medication_list'),
     path('medication/create/', views.medicationcreateview, name='medication_create'),
     path('medication/<int:pk>/delete/', views.MedicationDeleteView.as_view(), name='medication_delete'),
+    # Data exports
+    path('export-all-xls/', views.all_animal_export, name='all_xls_export'),
+    path('export-all-xls/', views.all_available_export, name='available_xls_export'),
+    path('export-all-xls/', views.all_quarantine_export, name='quarantine_xls_export'),
+    path('export-all-xls/', views.all_adopted_export, name='adopted_xls_export'),
+    path('export-all-xls/', views.all_reserved_export, name='reserved_xls_export'),
 ]

@@ -33,7 +33,7 @@ def contact(request):
             recipients = [os.environ['ADMINS']]
             message = f'PERSON: {form_name} \nCC SENDER: {form_cc_myself} \nSUBJECT: {form_subject}  \nMESSAGE: {form_message}'
             send_mail(subject, message, form_email, recipients)
-            messages.success(request, 'Your message was successfully sent!')
+            messages.success(request, 'Your message was successfully sent! Please check your spam folder.')
             return HttpResponseRedirect(reverse('index'))
         else:
             form = ContactUsForm()
