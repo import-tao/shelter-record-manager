@@ -1,4 +1,4 @@
-{% extends "catalog/base.html" %}
+    {% extends "catalog/base.html" %}
 {% block title %}<title>Building View</title> {% endblock %}
 {% block content %}
 <nav aria-label="breadcrumb">
@@ -8,24 +8,47 @@
         </ol>
       </nav>
 
-<h2>Cages</h2>
-
 {% if occupied_cages %}
 <h3>Occupied</h3>
+<div class="row">
 {% for animal in occupied_cages %}
-<ul>
-    <li>{{ animal.cage }}, <a href={{animal.get_absolute_url }}>{{animal.name}}</a></li> <a href="{{ animal.cage.get_cage_url}}">Edit</a>
-</ul>
+<div class="col-md-3 col-sm-3">
+<div class="card">
+        
+    <div class="card-body">
+        <h5 class="card-title">
+                {{ animal.cage }} </h5>
+            <p class="card-text">
+                
+                <a href={{animal.get_absolute_url }}>{{animal.name}}</a><br></p>
+                <a class= 'btn btn-info' href="{{ animal.cage.get_cage_url}}">Edit</a>
+                
+            
+        
+    </div>
+</div>
+</div>
 {% endfor %}
+</div>
 {% endif %}
 
 {% if vacant_cages %}
 <h3>Vacant Cages</h3>
+<div class="row">
 {% for cage in vacant_cages %}
-<ul>
-    <li>{{ cage }}</li> <a href="{{ cage.get_cage_url }}">Edit</a>
-</ul>
+<div class="col-md-3 col-sm-3">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">{{ cage }}</h5>
+            <h6 class="card-subtitle text-muted">Click Edit to add an animal!</h6>
+                
+                <a class="btn btn-info" href="{{ cage.get_cage_url }}">Edit</a>
+                
+        </div>
+    </div>
+</div>
 {% endfor %}
+</div>
 {% else %}
 <p>There are no vacant cages</p>
 {% endif %}
@@ -34,11 +57,15 @@
 
 {% if unallocated_animals %}
 <p>These animals have an available status but have not been allocated a cage.</p>
+<div class="row">
 {% for animal in unallocated_animals %}
+<div class="col-md-2 col-sm-2">
 <ul>
     <li><a href={{animal.get_absolute_url }}>{{animal.name}}</a></li>
 </ul>
+</div>
 {% endfor %}
+</div>
 {% else %}
 
 <p>There are no animals which need allocating.</p>

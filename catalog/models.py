@@ -30,7 +30,7 @@ class AnimalInstance(models.Model):
         ('f','Flat'),
         ('c','Curly'),
         ('w','Wiry'),
-        ('f','Fluffy'),
+        ('l','Fluffy'),
         ('s','Smooth'),
     )
     HAIR_LENGTH_CHOICES = (
