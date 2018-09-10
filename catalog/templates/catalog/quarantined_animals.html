@@ -1,0 +1,27 @@
+{% extends 'catalog/base.html' %} {% block title %}
+<title>Quaratined Animals</title> {% endblock %} {% block content %}
+    <div class="container">
+<h2>Quaratined Animals</h2>
+{% if animal_instances_quaratine %}
+<div class="row">
+        {% for animal in animal_instances_quaratine %}
+        
+            <div class="col-md-4 col-sm-4">
+              <div class= "card">
+                <div class="card-body">
+                <h5 class= "card-title"> <a href="{{ animal.get_absolute_url }}" >{{ animal.name }}</a><small>, {{ animal.animal_species }}</small></h5>
+                  <p class="card-text">{{ animal.breed|truncatechars:30 }}</p>
+              <a class="btn btn-primary" href="{{animal.get_update_url }}">Update</a>
+        
+         
+              <a class="btn btn-success"href="{{ animal.get_adopt_url }}">Adopt?</a>
+        
+        
+              <a class="btn btn-danger" href="{{ animal.get_delete_url }}">Delete!?</a>
+          </div>
+        </div>
+        </div>
+        {% endfor %}
+        </div> {% else %}
+<p>There are no quaratined animals.</p>
+{% endif %} </div>{% endblock %}

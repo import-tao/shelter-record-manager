@@ -209,6 +209,38 @@ def adopted_animals_view(request):
         }
     return render(request, 'catalog/adopted_animals.html', context=context_dict)
 
+
+@login_required
+def available_animals_view(request):
+    animal_instances_available = AnimalInstance.objects.filter(status__exact='a').order_by("name")
+    count_available = animal_instances_available.count()
+    context_dict = {
+        'animal_instances_available': animal_instances_available,
+        'count_available': count_available,
+        }
+    return render(request, 'catalog/available_animals.html', context=context_dict)
+
+
+@login_required
+def reserved_animals_view(request):
+    animal_instances_reserved = AnimalInstance.objects.filter(status__exact='r').order_by("name")
+    count_reserved = animal_instances_reserved.count()
+    context_dict = {
+        'animal_instances_reserved': animal_instances_reserved,
+        'count_reserved': count_reserved,
+        }
+    return render(request, 'catalog/reserved_animals.html', context=context_dict)
+
+@login_required
+def quarantined_animals_view(request):
+    animal_instances_quaratine = AnimalInstance.objects.filter(status__exact='q').order_by("name")
+    count_quaratine = animal_instances_quaratine.count()
+    context_dict = {
+        'animal_instances_quaratine': animal_instances_quaratine,
+        'count_quaratine': count_quaratine,
+        }
+    return render(request, 'catalog/quarantined_animals.html', context=context_dict)
+
 @login_required
 def allergycreateview(request):
     if request.method == 'POST':
