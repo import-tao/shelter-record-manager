@@ -1,0 +1,134 @@
+{% extends 'catalog/base.html' %} {% block content %}
+<div class="container">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item active" aria-current="page" aria-label="breadcrumb">Dashboard</li>
+    </ol>
+  </nav>
+
+  <div class='row justify-content-sm-start col-12'>
+    <div class="col-sm">
+      <p>
+
+        <strong>Available: </strong>{{ count_available }}</p>
+    </div>
+    <div class="col-sm">
+      <p><strong>Reserved: </strong>{{ count_reserved }}</p>
+    </div>
+    <div class="col-sm">
+      <p><strong>Adopted: </strong>{{ count_adopted }}</p>
+    </div>
+    <div class="col-sm">
+      <p><strong>Quarantined: </strong>{{ count_quarantine }}</p>
+    </div>
+    <div class="col-sm">
+      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModal">
+        Export Data
+      </button>
+    </div>
+  </div>
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h6>CSV Export</h6>
+        <ul>
+          <li><a href="{% url 'available_xls_export' %}">Available Only</a><br></li> 
+          <li><a href="{% url 'adopted_xls_export' %}">Adopted Only</a><br></li> 
+          <li><a href="{% url 'quarantine_xls_export' %}">Quarantined Only</a><br></li> 
+          <li><a href="{% url 'reserved_xls_export' %}">Reserved Only</a><br></li> 
+          <li><a href="{% url 'all_xls_export' %}">All animals</a></li> 
+      </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+  {% if animal_instances_available %}
+  <h2>Available Animals</h2>
+  <div class="container ">
+    <div class="row">
+      {% for animal in animal_instances_available %}
+
+      <div class="col-md-4 col-sm-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title"> <a href="{{ animal.get_absolute_url }}">{{ animal.name }}</a><small>, {{ animal.animal_species}}</small></h5>
+            <p class="card-text">{{ animal.breed|truncatechars:30 }}</p>
+            <a class="btn btn-primary" href="{{animal.get_update_url }}">Update</a>
+
+
+            <a class="btn btn-success" href="{{ animal.get_adopt_url }}">Adopt?</a>
+
+
+            <a class="btn btn-danger" href="{{ animal.get_delete_url }}">Delete!?</a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  {% else %}
+  <p>There are no animals available. Click <a href="{% url 'animal_create' %}">here</a> to add one!</p>
+
+  <a href="{% url 'animal_create' %}">Create an animal</a>
+  {% endif %} {% if animal_instances_reserved %}
+  <h2>Reserved Animals</h2>
+  <div class="row">
+    {% for animal in animal_instances_reserved %}
+
+    <div class="col-md-4 col-sm-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title"> <a href="{{ animal.get_absolute_url }}">{{ animal.name }}</a><small>, {{ animal.animal_species}}</small></h5>
+          <p class="card-text">{{ animal.breed|truncatechars:30 }}</p>
+          <a class="btn btn-primary" href="{{animal.get_update_url }}">Update</a>
+
+
+          <a class="btn btn-success" href="{{ animal.get_adopt_url }}">Adopt?</a>
+
+
+          <a class="btn btn-danger" href="{{ animal.get_delete_url }}">Delete!?</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %} {% if animal_instances_quarantine %}
+  <h2>Quarantined Animals</h2>
+  <div class="row">
+    {% for animal in animal_instances_quarantine %}
+
+    <div class="col-md-4 col-sm-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title"> <a href="{{ animal.get_absolute_url }}">{{ animal.name }}</a><small>, {{ animal.animal_species}}</small></h5>
+          <p class="card-text">{{ animal.breed|truncatechars:30 }}</p>
+          <a class="btn btn-primary" href="{{animal.get_update_url }}">Update</a>
+
+
+          <a class="btn btn-success" href="{{ animal.get_adopt_url }}">Adopt?</a>
+
+
+          <a class="btn btn-danger" href="{{ animal.get_delete_url }}">Delete!?</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+
+
+</div>
+{% endblock %}

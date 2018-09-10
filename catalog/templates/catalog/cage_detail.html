@@ -1,0 +1,74 @@
+    {% extends "catalog/base.html" %}
+{% block title %}<title>Building View</title> {% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item "><a href="{% url 'home_page' %}">Dashboard</a></li>
+            <li class="breadcrumb-item active" aria-current="page" aria-label="breadcrumb">Cage List</li>
+        </ol>
+      </nav>
+
+{% if occupied_cages %}
+<h3>Occupied</h3>
+<div class="row">
+{% for animal in occupied_cages %}
+<div class="col-md-3 col-sm-3">
+<div class="card">
+        
+    <div class="card-body">
+        <h5 class="card-title">
+                {{ animal.cage }} </h5>
+            <p class="card-text">
+                
+                <a href={{animal.get_absolute_url }}>{{animal.name}}</a><br></p>
+                <a class= 'btn btn-info' href="{{ animal.cage.get_cage_url}}">Edit</a>
+                
+            
+        
+    </div>
+</div>
+</div>
+{% endfor %}
+</div>
+{% endif %}
+
+{% if vacant_cages %}
+<h3>Vacant Cages</h3>
+<div class="row">
+{% for cage in vacant_cages %}
+<div class="col-md-3 col-sm-3">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">{{ cage }}</h5>
+            <h6 class="card-subtitle text-muted">Click Edit to add an animal!</h6>
+                
+                <a class="btn btn-info" href="{{ cage.get_cage_url }}">Edit</a>
+                
+        </div>
+    </div>
+</div>
+{% endfor %}
+</div>
+{% else %}
+<p>There are no vacant cages</p>
+{% endif %}
+
+<h3>Unallocated Animals</h3>
+
+{% if unallocated_animals %}
+<p>These animals have an available status but have not been allocated a cage.</p>
+<div class="row">
+{% for animal in unallocated_animals %}
+<div class="col-md-2 col-sm-2">
+<ul>
+    <li><a href={{animal.get_absolute_url }}>{{animal.name}}</a></li>
+</ul>
+</div>
+{% endfor %}
+</div>
+{% else %}
+
+<p>There are no animals which need allocating.</p>
+{% endif %}
+
+{% endblock %}
