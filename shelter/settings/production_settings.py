@@ -13,6 +13,8 @@ def get_env_variable(var_name):
 SECRET_KEY = get_env_variable('SECRET_KEY')
 DATABASES = {'default': dj_database_url.config(default='postgres://user:pass@localhost/dbname')}
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 DEBUG = get_env_variable('DEBUG')
 
 EMAIL_HOST = get_env_variable('EMAIL_HOST')
