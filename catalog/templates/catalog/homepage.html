@@ -61,9 +61,13 @@
 
 
   <div class="row">
-    <div class="col-md-2 ">
-      <h5 class="text-center"><i class="fas fa-cog"></i>Stats</h5>
-      <i class="fas fa-home"></i> Total Cages <span class="badge badge-primary">  {{ cage_objects.count }}</span> 
+    <div class="col-md-2">
+      <div class="border">
+        <h5 class="text-center"><i class="fas fa-home"></i>Cage Stats</h5>
+        Total <span class="badge badge-primary">  {{ cage_objects.count }}</span> <br>
+        Occupied <span class="badge badge-primary">  {{ count_occupied_cages }}</span> <br>
+        Free <span class="badge badge-primary">  {{ count_available_cages }}</span> 
+      </div>
     </div>
     <div class="col-md-10">
       <div class="row">

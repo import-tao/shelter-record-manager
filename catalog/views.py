@@ -42,6 +42,9 @@ def homepage_view(request):
     animal_instances_adopted = AnimalInstance.objects.filter(status__exact='d').order_by("-arrival_date")
     count_adopted = animal_instances_adopted.count()
     cage_objects = Building.objects.all()
+    count_occupied_cages = AnimalInstance.objects.all().exclude(status__exact='d') \
+                    .values_list('cage__cage').distinct().exclude(cage__cage=None).count()
+    count_available_cages = cage_objects.count() - count_occupied_cages
 
     context_dict = {
         'animal_instances_available': animal_instances_available,
@@ -53,6 +56,8 @@ def homepage_view(request):
         'count_adopted':count_adopted,
         'animal_instances_adopted':animal_instances_adopted,
         'cage_objects': cage_objects,
+        'count_occupied_cages': count_occupied_cages,
+        'count_available_cages':count_available_cages,
     }
     return render(request, 'catalog/homepage.html', context= context_dict)
 
