@@ -1,18 +1,19 @@
-from django.shortcuts import render, render_to_response, reverse, get_object_or_404
+from datetime import datetime
+
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Count, Q
 from django.http import HttpResponseRedirect, HttpResponse
-from .models import AnimalInstance, Building, Allergies, Medication
+from django.shortcuts import render, render_to_response, reverse, get_object_or_404
 from django.urls import reverse_lazy, resolve
 from django.views.generic import CreateView, UpdateView, DeleteView, DetailView
-from datetime import datetime
-from django.db.models import Count, Q
 
 from . import forms
 from .resources import AnimalInstanceResource
+from .models import AnimalInstance, Building, Allergies, Medication
 
 # Login imports - login required is for function based views
 # Mixin is for class based views and is passed as an argument
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
 '''
@@ -32,14 +33,19 @@ To do:
 
 @login_required
 def homepage_view(request):
-    animal_instances_available= AnimalInstance.objects.filter(status__exact='a').order_by("name")
+    animal_instances_available= AnimalInstance.objects.filter(status__exact='a').order_by("-arrival_date")
     count_available = animal_instances_available.count()
-    animal_instances_reserved = AnimalInstance.objects.filter(status__exact='r').order_by("name")
+    animal_instances_reserved = AnimalInstance.objects.filter(status__exact='r').order_by("-arrival_date")
     count_reserved = animal_instances_reserved.count()
-    animal_instances_quarantine = AnimalInstance.objects.filter(status__exact='q').order_by("name")
+    animal_instances_quarantine = AnimalInstance.objects.filter(status__exact='q').order_by("-arrival_date")
     count_quarantine = animal_instances_quarantine.count()
-    animal_instances_adopted = AnimalInstance.objects.filter(status__exact='d').order_by("name")
+    animal_instances_adopted = AnimalInstance.objects.filter(status__exact='d').order_by("-arrival_date")
     count_adopted = animal_instances_adopted.count()
+    cage_objects = Building.objects.all()
+    count_occupied_cages = AnimalInstance.objects.all().exclude(status__exact='d') \
+                    .values_list('cage__cage').distinct().exclude(cage__cage=None).count()
+    count_available_cages = cage_objects.count() - count_occupied_cages
+
     context_dict = {
         'animal_instances_available': animal_instances_available,
         'count_available':count_available,
@@ -48,6 +54,10 @@ def homepage_view(request):
         'animal_instances_quarantine': animal_instances_quarantine,
         'count_quarantine': count_quarantine,
         'count_adopted':count_adopted,
+        'animal_instances_adopted':animal_instances_adopted,
+        'cage_objects': cage_objects,
+        'count_occupied_cages': count_occupied_cages,
+        'count_available_cages':count_available_cages,
     }
     return render(request, 'catalog/homepage.html', context= context_dict)
 
@@ -132,6 +142,7 @@ class AnimalInstanceUpdateView(LoginRequiredMixin, UpdateView):
             'portion_size',
             'daily_portions',
             'allergies',
+            'picture',
         ]
     template_name = 'catalog/animal_instance_update.html'
 
@@ -208,6 +219,38 @@ def adopted_animals_view(request):
         'count_adopted': count_adopted,
         }
     return render(request, 'catalog/adopted_animals.html', context=context_dict)
+
+
+@login_required
+def available_animals_view(request):
+    animal_instances_available = AnimalInstance.objects.filter(status__exact='a').order_by("name")
+    count_available = animal_instances_available.count()
+    context_dict = {
+        'animal_instances_available': animal_instances_available,
+        'count_available': count_available,
+        }
+    return render(request, 'catalog/available_animals.html', context=context_dict)
+
+
+@login_required
+def reserved_animals_view(request):
+    animal_instances_reserved = AnimalInstance.objects.filter(status__exact='r').order_by("name")
+    count_reserved = animal_instances_reserved.count()
+    context_dict = {
+        'animal_instances_reserved': animal_instances_reserved,
+        'count_reserved': count_reserved,
+        }
+    return render(request, 'catalog/reserved_animals.html', context=context_dict)
+
+@login_required
+def quarantined_animals_view(request):
+    animal_instances_quaratine = AnimalInstance.objects.filter(status__exact='q').order_by("name")
+    count_quaratine = animal_instances_quaratine.count()
+    context_dict = {
+        'animal_instances_quaratine': animal_instances_quaratine,
+        'count_quaratine': count_quaratine,
+        }
+    return render(request, 'catalog/quarantined_animals.html', context=context_dict)
 
 @login_required
 def allergycreateview(request):

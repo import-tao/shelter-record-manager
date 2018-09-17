@@ -4,7 +4,12 @@ from . import views
 
 urlpatterns = [
     path('', views.homepage_view, name='home_page'),
+    # list of animals
+    path('available/', views.available_animals_view, name='available_animals'),
     path('adopted/', views.adopted_animals_view, name='adopted_animals'),
+    path('reserved/', views.reserved_animals_view, name='reserved_animals'),
+    path('quarantine/', views.quarantined_animals_view, name='quarantined_animals'),
+
     path('create/', views.AnimalCreateView, name="animal_create"),
     path('<int:pk>/', views.AnimalDetailView.as_view(), name='animal_detail'),
     path('<int:pk>/update/', views.AnimalInstanceUpdateView.as_view(), name= "animal_instance_update"),
