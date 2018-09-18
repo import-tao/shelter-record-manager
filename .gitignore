@@ -10,3 +10,4 @@ slnx.sqlite
 .vscode/
 htmlcov/
 .coverage
+migrations/
