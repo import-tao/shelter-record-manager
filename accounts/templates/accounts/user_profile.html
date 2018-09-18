@@ -4,13 +4,22 @@
 {% endblock %}
 
 {% block content %}
-<h2>Profile</h2>
-<ul>
-<li><strong>Username: </strong>{{ user.username }}</li>
-<li><strong>First Name: </strong>{{ user.first_name }}</li>
-<li><strong>Last Name: </strong>{{ user.last_name }}</li>
-<li><strong>Email: </strong>{{ user.email}}</li>
 
-</ul>
-<a href="{% url 'user_profile_edit' %}">Edit?</a>
+<br>
+<div class="container" style="width: 18rem">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title"><strong>Username: </strong>{{ user.username }}</h5>
+      <hr>
+      <p class="card-text">
+        <strong>First Name: </strong>{{ user.first_name }} <br>
+        <strong>Last Name: </strong>{{ user.last_name }} <br>
+        <strong>Email: </strong>{{ user.email}} <br>
+        <p class="text-center"><a href="{% url 'user_profile_edit' %}" class="btn btn-primary text-cent">Edit</a></p>
+      </p>
+    </div>
+  </div>
+</div>
+
+
   {% endblock %}
