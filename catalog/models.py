@@ -55,6 +55,7 @@ class AnimalInstance(models.Model):
     # For foreign keys, if the table is before it, you do not have to put it in a string, but if it is after you do, otherwise it will result in an error.
     # New in 2.0 the on_delete became mandatory. This defines what happens when the other table dets deleted and there are various options of nulling the field
     # deleting it as well (CASCADE), stopping it from being deleted (PROTECT). More information is within the django docs.
+    picture = models.ImageField(blank=True)
     cross = models.NullBooleanField(blank= True, default= False, help_text = 'Is the animal a cross breed? if not sure select No.')
     bio = models.TextField(max_length = 1000, help_text= 'Enter a brief description about the animal and their personality. \
                                                          This may include distinctive markings, \

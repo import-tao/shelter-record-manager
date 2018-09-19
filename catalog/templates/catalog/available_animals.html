@@ -1,4 +1,5 @@
-{% extends 'catalog/base.html' %} {% block title %}
+{% extends 'catalog/base.html' %} 
+{% load static %}{% block title %}
 <title>Available Animals</title> {% endblock %} {% block content %}
     <div class="container">
 <h2>Available Animals</h2>
@@ -8,6 +9,7 @@
         
             <div class="col-md-4 col-sm-4">
               <div class= "card">
+                    <img class="card-img-top" src="{{ animal.picture }}" alt="Card image cap">
                 <div class="card-body">
                 <h5 class= "card-title"> <a href="{{ animal.get_absolute_url }}" >{{ animal.name }}</a><small>, {{ animal.animal_species }}</small></h5>
                   <p class="card-text">{{ animal.breed|truncatechars:30 }}</p>
