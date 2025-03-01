@@ -1,0 +1,36 @@
+version: 2
+updates:
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    target-branch: "master"
+    labels:
+      - "dependencies"
+      - "security"
+    commit-message:
+      prefix: "deps"
+      include: "scope"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "Luke"
+    allow:
+      - dependency-type: "direct"
+    groups:
+      django-packages:
+        patterns:
+          - "django*"
+      test-packages:
+        patterns:
+          - "pytest*"
+          - "coverage"
+          - "factory-boy"
+          - "faker"
+      aws-packages:
+        patterns:
+          - "boto3*"
+      celery-packages:
+        patterns:
+          - "celery*"
+          - "redis"
+          - "django-celery*" 
