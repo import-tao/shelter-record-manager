@@ -122,9 +122,7 @@ class AdoptedAnimalUpdate(LoginRequiredMixin, UpdateView):
     queryset = AnimalInstance.objects.all()
 
     def get_context_data(self, **kwargs):
-        _id = self.kwargs.get('id')
         context = super(AdoptedAnimalUpdate, self).get_context_data(**kwargs)
-        context['second_model'] = SecondModel.objects.get(id=pk) #whatever you would like
         return context
 
 class CageUpdateView(LoginRequiredMixin, UpdateView):
@@ -329,5 +327,5 @@ def all_adopted_export(request):
     return export_to_csv(queryset)
 
 def all_reserved_export(request):
-    animal_resource = AnimalInstanceResource()
+    queryset = AnimalInstance.objects.filter(status__exact='r')
     return export_to_csv(queryset)
