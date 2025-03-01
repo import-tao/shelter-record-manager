@@ -1,30 +1,29 @@
 # Animal Shelter Management System
 
-A comprehensive Content Management System (CMS) for animal shelters and charities, built with Django 4.2.
+A comprehensive Content Management System (CMS) for animal shelters and charities, built with Django 4.2.18.
 
 ## Features
 
-- Complete animal lifecycle management
-- Adoption and fostering workflows
+- Complete animal lifecycle management (induction through adoption)
+- Animal status tracking (Available, Reserved, Quarantine, Adopted)
 - Medical records and treatment tracking
-- Event management and volunteer coordination
-- Donation and sponsorship handling
-- RESTful API
-- Celery for background tasks
-- Modern security features
+- Cage and building management
+- Allergy and medication tracking
+- Export functionality (XLS format)
+- Role-based access control
+- Secure authentication system
 
 ## Prerequisites
 
 - Python 3.8+
-- PostgreSQL 12+
-- Redis (for Celery)
-- Node.js 16+ (if using React frontend)
+- PostgreSQL/MySQL
+- Redis (for Celery tasks)
 
 ## Installation
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/shelter-record-manager.git
+git clone https://github.com/import-tao/shelter-record-manager.git
 cd shelter-record-manager
 ```
 
@@ -41,47 +40,16 @@ pip install -r requirements/requirements_production.txt
 pip install -r requirements/requirements_local.txt
 ```
 
-4. Set up environment variables:
+4. Set up the database:
 ```bash
-cp .env.example .env
-# Edit .env with your configuration
+python manage.py migrate --settings=shelter.settings.base_settings
+python manage.py createsuperuser --settings=shelter.settings.base_settings
 ```
 
-5. Set up the database:
+5. Run the development server:
 ```bash
-python manage.py migrate
-python manage.py createsuperuser
+python manage.py runserver --settings=shelter.settings.base_settings
 ```
-
-6. Collect static files:
-```bash
-python manage.py collectstatic
-```
-
-7. Start Redis server (required for Celery)
-
-8. Start Celery worker:
-```bash
-celery -A shelter worker -l info
-celery -A shelter beat -l info
-```
-
-9. Run the development server:
-```bash
-python manage.py runserver
-```
-
-## Environment Variables
-
-Copy `.env.example` to `.env` and configure the following variables:
-
-- `SECRET_KEY`: Django secret key
-- `DEBUG`: Set to False in production
-- `ALLOWED_HOSTS`: Comma-separated list of allowed hosts
-- `DB_*`: Database configuration
-- `EMAIL_*`: Email server configuration
-- `CELERY_BROKER_URL`: Redis URL for Celery
-- `AWS_*`: AWS S3 configuration (if using S3 for storage)
 
 ## Development
 
@@ -90,46 +58,30 @@ Copy `.env.example` to `.env` and configure the following variables:
 pip install -r requirements/requirements_local.txt
 ```
 
-2. Enable debug toolbar by setting `DEBUG=True` in `.env`
-
-3. Run tests:
+2. Run tests:
 ```bash
-pytest
+python manage.py test --settings=shelter.settings.base_settings
 ```
 
-4. Check code quality:
-```bash
-black .
-flake8
-mypy .
-```
+## Key Dependencies
 
-## API Documentation
-
-The API is built using Django REST Framework. Documentation is available at:
-
-- `/api/docs/` - API documentation
-- `/api/schema/` - OpenAPI schema
+- Django==4.2.18
+- django-crispy-forms==2.1
+- django-import-export==3.3.7
+- djangorestframework==3.15.2
+- gunicorn==22.0.0
+- Pillow==11.1.0
+- celery==5.5.0b1
+- redis==5.0.1
 
 ## Security Features
 
 - HTTPS enforcement
-- Secure cookie settings
-- HSTS enabled
+- Secure authentication
 - XSS protection
-- Content type nosniff
-- X-Frame-Options denial
-- CORS configuration
-
-## Deployment
-
-1. Set `DEBUG=False` in production
-2. Configure proper database settings
-3. Set up proper email backend
-4. Configure AWS S3 for media storage
-5. Set up proper SSL/TLS certificates
-6. Configure proper CORS settings
-7. Set up proper backup strategy
+- SQL injection protection
+- Request smuggling protection
+- Login required for sensitive operations
 
 ## Contributing
 
@@ -143,12 +95,6 @@ The API is built using Django REST Framework. Documentation is available at:
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## Acknowledgments
-
-- Django community
-- Contributors and maintainers
-- Animal shelter staff and volunteers who provided valuable feedback
-
 ## Support
 
-For support, please open an issue in the GitHub repository or contact the maintainers.
+For support, please open an issue in the GitHub repository.
