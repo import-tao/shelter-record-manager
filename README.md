@@ -15,11 +15,34 @@ A comprehensive Content Management System (CMS) for animal shelters and charitie
 
 ## Prerequisites
 
-- Python 3.8+
-- PostgreSQL/MySQL
-- Redis (for Celery tasks)
+- Python 3.8+ (for local development)
+- Docker and Docker Compose (recommended)
+- PostgreSQL/MySQL (for local development)
+- Redis (for local development)
 
 ## Installation
+
+### Using Docker (Recommended)
+
+1. Clone the repository:
+```bash
+git clone https://github.com/import-tao/shelter-record-manager.git
+cd shelter-record-manager
+```
+
+2. Build and start the containers:
+```bash
+docker-compose up --build
+```
+
+3. Create a superuser:
+```bash
+docker-compose exec web python manage.py createsuperuser --settings=shelter.settings.base_settings
+```
+
+The application will be available at http://localhost:8000
+
+### Local Development
 
 1. Clone the repository:
 ```bash
