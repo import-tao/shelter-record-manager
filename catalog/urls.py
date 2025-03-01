@@ -10,7 +10,7 @@ urlpatterns = [
     path('reserved/', views.reserved_animals_view, name='reserved_animals'),
     path('quarantine/', views.quarantined_animals_view, name='quarantined_animals'),
 
-    path('create/', views.AnimalCreateView, name="animal_create"),
+    path('create/', views.AnimalCreateView.as_view(), name="animal_create"),
     path('<int:pk>/', views.AnimalDetailView.as_view(), name='animal_detail'),
     path('<int:pk>/update/', views.AnimalInstanceUpdateView.as_view(), name= "animal_instance_update"),
     path('<int:pk>/delete/', views.AnimalInstanceDeleteView.as_view(), name= 'animal_instance_delete'),

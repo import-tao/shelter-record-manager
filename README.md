@@ -1,203 +1,154 @@
-# Shelter-Record-Manager
-This is a project to build an app to manage the day to day running of an animal shelter.
+# Animal Shelter Management System
 
-## Git Crash Course to Start Contributing
-At a high level, here’s how we suggest you go about proposing a change to this project:
+A comprehensive Content Management System (CMS) for animal shelters and charities, built with Django 4.2.
 
-1. [Fork this project](https://help.github.com/articles/fork-a-repo/) to your account.
-2. [Create a branch](https://help.github.com/articles/creating-and-deleting-branches-within-your-repository) for the change you intend to make.
-3. Make your changes to your fork.
-4. [Send a pull request](https://help.github.com/articles/using-pull-requests/) from your fork’s branch to our master branch.
+## Features
 
-Click on the hyperlinks for a more detailed walk through of how to do each step.
+- Complete animal lifecycle management
+- Adoption and fostering workflows
+- Medical records and treatment tracking
+- Event management and volunteer coordination
+- Donation and sponsorship handling
+- RESTful API
+- Celery for background tasks
+- Modern security features
 
-## How to get up and running
+## Prerequisites
 
-Before we get started the below assumes that you have python installed. This project has been created using 3.6. If you do not have python, see the [python website](https://www.python.org/downloads/) to download it.
-If you have multiple versions of python installed on your computer, where it refers to typing "python" in the cmd line, you will need to specify which one you have e.g.
+- Python 3.8+
+- PostgreSQL 12+
+- Redis (for Celery)
+- Node.js 16+ (if using React frontend)
 
-``` shell
-python3
+## Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/shelter-record-manager.git
+cd shelter-record-manager
 ```
 
-If you are using any version of Python older than 3.4 (and that includes the 2.7 release), virtual environments are not supported natively. For those versions of Python, you need to download and install a third-party tool called virtualenv before you can create virtual environments.
-
-### Step 1 - Create Secret Key file
-
-All of the settings are stored within a file named "secret_environment_keys.py" which is imported into "settings.py". You will see at the top of settings.py it imports Config.
-
-Within the settings folder (shelter>settings) add in the following code to a file called "secret_environment_keys.py":
-
-``` python
-import os
-
-class Config(object):
-    SECRET_KEY = os.environ.get("SECRET_KEY") or '*CONTACT REPO CONTRIBUTOR FOR THIS*'
-
-    # Email settings which are not required
-    EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD") or '*EMAIL PASSWORD*'
-    EMAIL_HOST = os.environ.get('EMAIL_HOST') or '*EMAIL HOST*'
-    EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER') or '*EMAIL ADDRESS*'
-    EMAIL_PORT = int(os.environ.get("EMAIL_PORT") or *EMAIL PORT*)
-    EMAIL_USE_TLS = True
-    DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL') or 'My Animal Shelter <*EMAIL ADDRESS*>'
-    ADMINS =  (
-        "Dev", "*EMAIL ADDRESS*"),
-    )
-```
-
-Anything in stars needs to be added in. Note that only the SECRET_KEY is required to start Django and if you do not have this, Django will not run.
-
-Your shelter folder should now look like this:
-
-```
-+---shelter
-|       +--catalog
-|       +--shelter
-|           +--settings
-|               |...
-|               |secret_environment_keys.py
-|       +--templates
-|       .gitignote
-|       manage.py
-
-+---README.md
-+---requirments.txt
-+---UI-notes.txt
-```
-
-### Step 2 - Create virtual Environment
-
-This will use venv package built into [python](https://docs.python.org/3/library/venv.html).
-
-Naviagte to the folder (using cmd line) you wish to install the virtual environement. Some choose to have a dedicated folder for all their virtual environemtns whereas others choose to have the virtual environment in the top most folder for every project. If you need help with navigating via the cmd line
-
-Write the following to create the virtual environment. The first venv is the name of the package, and the second venv is the name of the environment you are creating. You could therefore change this to whatever you want.
-
-``` shell
+2. Create and activate a virtual environment:
+```bash
 python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 
-To activate using Windows do:
-
-``` shell
-> venv\Scripts\activate
-(venv) $_
+3. Install dependencies:
+```bash
+pip install -r requirements/requirements_production.txt
+# For development, also install:
+pip install -r requirements/requirements_local.txt
 ```
 
-To activate using mac:
-
-``` shell
-$source venv\bin\activate
-(venv) $_
+4. Set up environment variables:
+```bash
+cp .env.example .env
+# Edit .env with your configuration
 ```
 
-You will know you have activated it as it will say the name of your virtual environement in brackets at the start of the cmd line (in this case venv).
-
-To deactivate it once you have finished with it, all you need to do is type the below. If you are successful, it will remove the name of your virtual environemnt from the brackets in the cmd line:
-
-```shell
-deactivate
-$_
+5. Set up the database:
+```bash
+python manage.py migrate
+python manage.py createsuperuser
 ```
 
-### Step 3 - Install Dependecies from requirements.txt
-
-Now navigate to the folder which contains requirements.txt and type the following:
-
-``` shell
-pip install -r requirements.txt
+6. Collect static files:
+```bash
+python manage.py collectstatic
 ```
 
-This will read the requirements.txt file and automatically install everything within it
+7. Start Redis server (required for Celery)
 
-### Step 4 - Run a Local Server and Settings
+8. Start Celery worker:
+```bash
+celery -A shelter worker -l info
+celery -A shelter beat -l info
+```
 
-We should by now have:  
-[x] Created our config file  
-[x] Set up a virtual environment  
-[x] Activated it
-
-All that is left is to run a local server.  
-Using the cmd line, go to the folder with "manage.py" in it (the same one as requirements.txt) and type the following:
-
-``` shell
+9. Run the development server:
+```bash
 python manage.py runserver
 ```
 
-If this doesn't work and returns a secret key error, you will need to define the filepath to the settings file by doing:
+## Environment Variables
 
-``` shell
-python manage.py runserver --settings=shelter.settings.local_settings
+Copy `.env.example` to `.env` and configure the following variables:
+
+- `SECRET_KEY`: Django secret key
+- `DEBUG`: Set to False in production
+- `ALLOWED_HOSTS`: Comma-separated list of allowed hosts
+- `DB_*`: Database configuration
+- `EMAIL_*`: Email server configuration
+- `CELERY_BROKER_URL`: Redis URL for Celery
+- `AWS_*`: AWS S3 configuration (if using S3 for storage)
+
+## Development
+
+1. Install development dependencies:
+```bash
+pip install -r requirements/requirements_local.txt
 ```
 
+2. Enable debug toolbar by setting `DEBUG=True` in `.env`
 
-This will then run the Django project and it will state which port it is listening out on which is usually [http://127.0.0.1:8000/](http://127.0.0.1:8000/) (port 8000). If you want to change the port, you can specify this when you are activating the local server. So for port 5050 you would do:
-
-``` cmd
-python manage.py runserver 5050 --settings=shelter.settings.local_settings
+3. Run tests:
+```bash
+pytest
 ```
 
-If it was successful, and there are no problems in the code preventing it from running (e.g. syntax error) you will see the below:
-
-```shell
-Performing system checks...
-
-System check identified no issues (0 silenced).
-
-You have unapplied migrations; your app may not work properly until they are applied.
-Run 'python manage.py migrate' to apply them.
-
-June 29, 2018 - 15:50:53
-Django version 2.0, using settings 'mysite.settings'
-Starting development server at http://127.0.0.1:8000/
-Quit the server with CONTROL-C.
+4. Check code quality:
+```bash
+black .
+flake8
+mypy .
 ```
 
-When you have finished with this you can press control + C to stop the local server. It is worth noting that if you make changes to the code and save it, whilst the local server is running, this will be automatically changed and you therefore do not need to stop the server and re-run it again.
+## API Documentation
 
-'local_settings' is the name of the file being used for the settings and change this if you want to use a different file (which is in the same folder).If you want to create your own settings file, this can done by creating a new .py file within the settings folder. Ensure you import all from the base_settings.py file:
+The API is built using Django REST Framework. Documentation is available at:
 
-```python
-from .base_settings import *
-```
+- `/api/docs/` - API documentation
+- `/api/schema/` - OpenAPI schema
 
-Now you can add in the specific settings you need. Note that there is a specific file for production settings in this folder.
+## Security Features
 
-You will likely need to make migrations too. To do this do the following:
+- HTTPS enforcement
+- Secure cookie settings
+- HSTS enabled
+- XSS protection
+- Content type nosniff
+- X-Frame-Options denial
+- CORS configuration
 
-```cmd
-python manage.py makemigrations --settings=shelter.settings.local_settings
-```
+## Deployment
 
-Potentially you may need to specify the app which requires the migrations e.g.
+1. Set `DEBUG=False` in production
+2. Configure proper database settings
+3. Set up proper email backend
+4. Configure AWS S3 for media storage
+5. Set up proper SSL/TLS certificates
+6. Configure proper CORS settings
+7. Set up proper backup strategy
 
-```cmd
-python manage.py makemigrations catalog --settings=shelter.settings.local_settings
-```
+## Contributing
 
-Or
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
 
-```cmd
-python manage.py makemigrations accounts --settings=shelter.settings.local_settings
-```
+## License
 
-### Step 5 (optional) - Users
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-To create a user for the website you can use the createsuperuser command, however to use the signup pages of the website, you need to first ensure that the email is allowed. There is a model named PermittedEmails within shelter.accounts.models. This is used to control who is able to sign up on the website. When using the sign up form, there is avalidation to ensure no one can sign up with a username or email which already exists, or an email which is not permitted; this validation is done within forms.py.
+## Acknowledgments
 
-### Step 6 Test Coverage
+- Django community
+- Contributors and maintainers
+- Animal shelter staff and volunteers who provided valuable feedback
 
-To test your coverage, you can use coverage (pip install coverage) and following the below commands to show the % of the code which the tests cover/touch.
+## Support
 
-```cmd
-coverage run --source='.' manage.py test the-app-you-want-to-test --settings=shelter.settings.local_settings
-```
-
-This will then create a coverage file in the same directory. To view the results, you can generate an html report:
-
-```cmd
-coverage html
-```
-
-This will then create a folder called htmlcov. Find the index.html file and open it in your browser!
+For support, please open an issue in the GitHub repository or contact the maintainers.

@@ -1,10 +1,11 @@
 from datetime import datetime
+from django.utils import timezone
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count, Q
 from django.http import HttpResponseRedirect, HttpResponse
-from django.shortcuts import render, render_to_response, reverse, get_object_or_404
+from django.shortcuts import render, reverse, get_object_or_404
 from django.urls import reverse_lazy, resolve
 from django.views.generic import CreateView, UpdateView, DeleteView, DetailView
 
@@ -68,83 +69,54 @@ class AnimalDetailView(LoginRequiredMixin,DetailView):
     context_object_name = 'animal_instance'
 
 
-@login_required
-def AnimalCreateView(request):
-    # Check to see if a POST has been submitted. Using GET to submit forms?
-    # Don't do it. Use POST.
-    if request.POST:
-        form = forms.AnimalInstanceCreateForm(request.POST)
-        if form.is_valid():
-            # Prepare the animal model, but don't commit it to the database
-            # just yet.
-            animal = form.save(commit=False)
-            # Save the main object and continue on our merry way.
-            animal.save()
-            # After a post request, you redirect to another page to prevent a continous loop of posting
-            return HttpResponseRedirect(reverse('home_page') )
-    # This will capture get request
-    else:
-        # set the forms to show
-        form = forms.AnimalInstanceCreateForm()
-        # return the forms in the render to the animalcreate.html file
-        # Within the template all we need to do then is {{ type form.as_p }} & {{}} sub_form.as_p }}
-        return render(request, 'catalog/animalcreate.html', context={
-            'form': form,
-            })
+class AnimalCreateView(LoginRequiredMixin, CreateView):
+    model = AnimalInstance
+    form_class = forms.AnimalInstanceCreateForm
+    template_name = 'catalog/animalcreate.html'
+    success_url = reverse_lazy('home_page')
+
+    def form_valid(self, form):
+        self.object = form.save()
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        return self.render_to_response(self.get_context_data(form=form))
 
 # View for updating the Animal Model
 @login_required
 def animalinstanceadoptview(request, pk):
     url_name = resolve(request.path).url_name
+    animal = get_object_or_404(AnimalInstance, id=pk)
+    template = 'catalog/adopted_animal_update.html' if 'adopt_existing' in url_name else 'catalog/adopt_animal.html'
+    
     if request.method == 'POST':
-        form = forms.AnimalInstanceAdoptForm(request.POST, prefix="ani", instance = get_object_or_404(AnimalInstance, id=pk))
+        form = forms.AnimalInstanceAdoptForm(request.POST, instance=animal)
         if form.is_valid():
-            form.save()
+            animal = form.save()
             return HttpResponseRedirect(reverse('home_page'))
-        else:
-            context = {
-                'form':form,
-            }
-            if 'adopt_existing' in url_name:
-                return render(request, 'catalog/adopted_animal_update', context)
-            else:
-                return render(request, 'catalog/adopt_animal.html', context)
     else:
-        date = datetime.today().date()
         initial = {
-            'leaving_date': date,
+            'leaving_date': timezone.now(),
+            'status': 'd',
         }
-        form = forms.AnimalInstanceAdoptForm(instance=get_object_or_404(AnimalInstance, id=pk), prefix="ani", initial=initial)
-        context = {
-            'form':form,
-        }
-        # Get the url which is being passed to the view, and then decide which template to use
-        #This means we can still use the same view logic without repeating ourself
-        if 'adopt_existing' in url_name:
-            return render(request, 'catalog/adopted_animal_update.html', context)
-        else:
-            return render(request, 'catalog/adopt_animal.html', context)
+        form = forms.AnimalInstanceAdoptForm(instance=animal, initial=initial)
+    
+    context = {'form': form, 'animal': animal}
+    return render(request, template, context)
 
 
 class AnimalInstanceUpdateView(LoginRequiredMixin, UpdateView):
     model = AnimalInstance
-    fields = [
-            'name',
-            'cross',
-            'bio',
-            'status',
-            'arrival_date',
-            'gender',
-            'hair_type',
-            'hair_length',
-            'cage',
-            'food_type',
-            'portion_size',
-            'daily_portions',
-            'allergies',
-            'picture',
-        ]
+    form_class = forms.AnimalInstanceCreateForm
     template_name = 'catalog/animal_instance_update.html'
+    success_url = reverse_lazy('home_page')
+
+    def form_valid(self, form):
+        self.object = form.save()
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        return self.render_to_response(self.get_context_data(form=form))
 
 class AdoptedAnimalUpdate(LoginRequiredMixin, UpdateView):
     queryset = AnimalInstance.objects.all()
