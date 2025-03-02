@@ -328,4 +328,5 @@ def all_adopted_export(request):
 
 def all_reserved_export(request):
     queryset = AnimalInstance.objects.filter(status__exact='r')
+    animal_resource = AnimalInstanceResource()
     return export_to_csv(queryset)

@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import include
+from django.conf import settings
 from . import views
 
 # The include function means for anythin which is 'app/' in the url, it will send it to the catalog app, urls file
@@ -31,3 +32,8 @@ urlpatterns = [
     path('app/', include('catalog.urls')),
     path('accounts/', include('accounts.urls')),
 ]
+
+if settings.DEBUG:
+    urlpatterns += [
+        path('__debug__/', include('debug_toolbar.urls')),
+    ]
