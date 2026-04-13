@@ -1,10 +1,10 @@
-﻿-r requirements_production.txt
+-r requirements_production.txt
 
 # Development Tools
 coverage==7.6.12
 black==24.3.0
 flake8==7.0.0
-pytest==8.0.0
+pytest==9.0.3
 pytest-django==4.7.0
 pytest-cov==4.1.0
 factory-boy==3.3.0
